@@ -1,0 +1,57 @@
+[
+  {
+    "id": "4d5e6f7a-4444-4ddd-dddd-444444444444",
+    "nomeCompleto": "Gabriel Amara",
+    "nomeUsuario": "gabriel.amara",
+    "sobrenome": "Amara",
+    "email": "gabriel.amara@email.com",
+    "senha": "Gab@1234",
+    "temMfa": true,
+    "ativo": true,
+    "ultimoAcessoEm": "2026-06-03T08:20:00"
+  },
+  {
+    "id": "5e6f7a8b-5555-4eee-eeee-555555555555",
+    "nomeCompleto": "Camila Lopes",
+    "nomeUsuario": "camila.lopes",
+    "sobrenome": "Lopes",
+    "email": "camila.lopes@email.com",
+    "senha": "Cami@1234",
+    "temMfa": false,
+    "ativo": true,
+    "ultimoAcessoEm": "2026-06-01T11:45:00"
+  },
+  {
+    "id": "6f7a8b9c-6666-4fff-ffff-666666666666",
+    "nomeCompleto": "Guilherme Godoy",
+    "nomeUsuario": "guilherme.godoy",
+    "sobrenome": "Godoy",
+    "email": "guilherme.godoy@email.com",
+    "senha": "Gui@1234",
+    "temMfa": true,
+    "ativo": true,
+    "ultimoAcessoEm": "2026-05-30T16:10:00"
+  },
+  {
+    "id": "7a8b9c0d-7777-4aaa-aaaa-777777777777",
+    "nomeCompleto": "Pedro Lucas",
+    "nomeUsuario": "pedro.lucas",
+    "sobrenome": "Lucas",
+    "email": "pedro.lucas@email.com",
+    "senha": "Pedro@1234",
+    "temMfa": false,
+    "ativo": false,
+    "ultimoAcessoEm": "2026-05-10T09:30:00"
+  },
+  {
+    "id": "8b9c0d1e-8888-4bbb-bbbb-888888888888",
+    "nomeCompleto": "Luis Felipe Scacchetti",
+    "nomeUsuario": "luis.scacchetti",
+    "sobrenome": "Scacchetti",
+    "email": "luis.scacchetti@email.com",
+    "senha": "Luis@1234",
+    "temMfa": true,
+    "ativo": true,
+    "ultimoAcessoEm": "2026-06-02T19:55:00"
+  }
+]

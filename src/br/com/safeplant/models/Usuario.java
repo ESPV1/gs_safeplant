@@ -1,12 +1,20 @@
 package br.com.safeplant.models;
 
 import br.com.safeplant.interfaces.IUsuario;
+
+import java.lang.reflect.Type;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class Usuario implements IUsuario {
     private String id;
     private String nomeCompleto;
+    private String nomeUsuario;
     private String primeiroNome;
     private String sobrenome;
     private String email;
@@ -15,9 +23,18 @@ public class Usuario implements IUsuario {
     private boolean ativo;
     private LocalDateTime ultimoAcessoEm;
 
-    public Usuario(String nomeCompleto, String email, String senha) {
-        this.id = UUID.randomUUID().toString();
+    public Usuario() {}
+
+    // Construtor teste somente até ser possível ler usuário do JSON
+    public Usuario(String nomeUsuario, String senha){
+        this.nomeUsuario = nomeUsuario;
+        this.senha = senha;
+    }
+
+    public Usuario(String id, String nomeCompleto, String nomeUsuario, String email, String senha) {
+        this.id = id;
         this.nomeCompleto = nomeCompleto;
+        this.nomeUsuario = nomeUsuario;
         this.email = email;
         this.senha = senha;
         this.ultimoAcessoEm = LocalDateTime.now();
@@ -89,14 +106,6 @@ public class Usuario implements IUsuario {
         this.ultimoAcessoEm = ultimoAcessoEm;
     }
 
-    public String getPrimeiroNome() {
-        return primeiroNome;
-    }
-
-    public void setPrimeiroNome(String primeiroNome) {
-        this.primeiroNome = primeiroNome;
-    }
-
     public String getSobrenome() {
         return sobrenome;
     }
@@ -105,16 +114,32 @@ public class Usuario implements IUsuario {
         this.sobrenome = sobrenome;
     }
 
-    public String encriptarSenha(String senha) {
-        return "";
+    public String getNomeUsuario() {
+        return nomeUsuario;
     }
 
-    public String decriptarSenha(String senha) {
-        return "";
+    public void setNomeUsuario(String nomeUsuario) {
+        this.nomeUsuario = nomeUsuario;
     }
 
-    public void autenticarUsuario() {
+    public String getPrimeiroNome() {
+        return primeiroNome;
+    }
 
+    public void setPrimeiroNome(String primeiroNome) {
+        this.primeiroNome = primeiroNome;
+    }
+
+    public boolean autenticarUsuario(String usuario, String senha) {
+        if (senha.isEmpty())
+            return false;
+        String senhaformatada = senha.trim();
+
+        if (!usuario.equals("luis.mariano") || !senhaformatada.equals("123"))
+            return false;
+        this.nomeUsuario = usuario;
+        this.senha = senha;
+        return true;
     }
 
     public boolean adicionar() {
@@ -132,9 +157,22 @@ public class Usuario implements IUsuario {
     public boolean exibir() {
         return false;
     }
-    
+
     public boolean verificarUsuario() {
         return true;
+    }
+
+    public ArrayList<Usuario> lerTodosUsuarios() {
+        try {
+            URL url = Usuario.class.getClassLoader().getResource("db_user.json");
+            String jsonUsers = Files.readString(Paths.get(url.toURI()), StandardCharsets.UTF_8);
+
+            return null;
+        }
+        catch (Exception ex) {
+            return null;
+        }
+
     }
 
 }

@@ -25,9 +25,7 @@ public class Agricultor implements IAgricultor {
         return id;
     }
 
-    private void setId(String value) {
-        this.id = value;
-    }
+    private void setId(String value) { this.id = value; }
 
     public LocalDateTime getDataDeNascimento() {
         return dataDeNascimento;

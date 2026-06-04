@@ -105,13 +105,36 @@ public class Usuario implements IUsuario {
         this.sobrenome = sobrenome;
     }
 
-    @Override
-    public String EncriptarSenha(String senha) {
+    public String encriptarSenha(String senha) {
         return "";
     }
 
-    @Override
-    public String DecriptarSenha(String senha) {
+    public String decriptarSenha(String senha) {
         return "";
     }
+
+    public void autenticarUsuario() {
+
+    }
+
+    public boolean adicionar() {
+        return true;
+    }
+
+    public boolean remover() {
+        return true;
+    }
+
+    public boolean editar() {
+        return false;
+    }
+
+    public boolean exibir() {
+        return false;
+    }
+    
+    public boolean verificarUsuario() {
+        return true;
+    }
+
 }

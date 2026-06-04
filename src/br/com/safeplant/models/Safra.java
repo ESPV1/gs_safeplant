@@ -51,7 +51,23 @@ public class Safra implements ISafra {
         this.status = status;
     }
 
-    public void ModificarStatusSafra(StatusSafra status) {
+    public void modificarStatusSafra(StatusSafra status) {
         setStatus(status);
+    }
+
+    public boolean adicionar() {
+        return true;
+    }
+
+    public boolean editar() {
+        return true;
+    }
+
+    public boolean exibir() {
+        return true;
+    }
+
+    public boolean remover() {
+        return true;
     }
 }

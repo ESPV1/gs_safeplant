@@ -48,4 +48,44 @@ public class Produto implements IProduto {
     public void setTempoColheitaEmDias(String tempoColheitaEmDias) {
         this.tempoColheitaEmDias = tempoColheitaEmDias;
     }
+
+    public void GerenciamentoSafra() {
+
+    }
+
+    public boolean Adicionar() {
+        return true;
+    }
+
+    public boolean Editar() {
+        return true;
+    }
+
+    public boolean Remover() {
+        return true;
+    }
+
+    public void exibirProdutos() {
+
+    }
+
+    @Override
+    public boolean adicionar() {
+        return false;
+    }
+
+    @Override
+    public boolean remover() {
+        return false;
+    }
+
+    @Override
+    public boolean editar() {
+        return false;
+    }
+
+    @Override
+    public boolean exibir() {
+        return false;
+    }
 }

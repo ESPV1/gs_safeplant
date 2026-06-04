@@ -110,4 +110,12 @@ public class Endereco {
             return null;
         }
     }
+
+    public boolean Adicionar() {
+        return false;
+    }
+
+    public boolean Editar() {
+        return true;
+    }
 }

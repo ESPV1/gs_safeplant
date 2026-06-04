@@ -1,7 +1,8 @@
 package br.com.safeplant.interfaces;
 
-public interface IUsuario {
-    String EncriptarSenha(String senha);
-    String DecriptarSenha(String senha);
-    
+public interface IUsuario extends IOperacoesPadrao {
+    String encriptarSenha(String senha);
+    String decriptarSenha(String senha);
+    void autenticarUsuario();
+    boolean verificarUsuario();
 }

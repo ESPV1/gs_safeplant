@@ -1,4 +1,4 @@
-package br.com.safeplant.view;
+package br.com.safeplant.monitoramentosafras.view;
 
 import java.util.Scanner;
 

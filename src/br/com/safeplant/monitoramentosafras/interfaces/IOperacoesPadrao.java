@@ -1,4 +1,4 @@
-package br.com.safeplant.interfaces;
+package br.com.safeplant.monitoramentosafras.interfaces;
 
 public interface IOperacoesPadrao {
     boolean adicionar();

@@ -1,4 +1,4 @@
-package br.com.safeplant.models;
+package br.com.safeplant.monitoramentosafras.models;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -15,6 +15,8 @@ public class Endereco {
     private String cidade;
     private String uf;
     private String complemento;
+
+    public Endereco() {}
 
     public Endereco(String cep, String logradouro, String numero, String bairro, String cidade, String uf, String complemento) {
         this.id = UUID.randomUUID().toString();

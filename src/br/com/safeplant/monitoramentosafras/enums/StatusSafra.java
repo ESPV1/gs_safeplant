@@ -1,4 +1,4 @@
-package br.com.safeplant.enums;
+package br.com.safeplant.monitoramentosafras.enums;
 
 public enum StatusSafra {
 

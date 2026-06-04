@@ -1,6 +1,6 @@
-package br.com.safeplant;
+package br.com.safeplant.monitoramentosafras;
 
-import br.com.safeplant.view.MenuAutenticacao;
+import br.com.safeplant.monitoramentosafras.view.MenuAutenticacao;
 
 public class Main {
     public static void main(String[] args) {

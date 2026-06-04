@@ -1,6 +1,6 @@
-package br.com.safeplant.models;
+package br.com.safeplant.monitoramentosafras.models;
 
-import br.com.safeplant.interfaces.ILocalizacao;
+import br.com.safeplant.monitoramentosafras.interfaces.ILocalizacao;
 
 import java.util.UUID;
 

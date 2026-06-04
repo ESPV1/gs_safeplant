@@ -1,8 +1,7 @@
-package br.com.safeplant.view;
+package br.com.safeplant.monitoramentosafras.view;
 
-import br.com.safeplant.models.Usuario;
+import br.com.safeplant.monitoramentosafras.models.Usuario;
 
-import java.awt.*;
 import java.io.Console;
 import java.util.Scanner;
 
@@ -19,7 +18,7 @@ public class MenuAutenticacao {
         System.out.println("\n\nSEJA BEM VINDO AO SAFE PLANT");
 
         boolean foiAutenticado = false;
-        MenuPrincipal menu = new MenuPrincipal();
+        Usuario usuarioAutenticado = new Usuario();
         do {
 
             System.out.println("Faça o Login na plataforma ou digite 1 para cadastrar-se!");
@@ -38,13 +37,14 @@ public class MenuAutenticacao {
                 senha = scanner.next();
             }
 
-            Usuario usuarioAutenticado = new Usuario();
-            foiAutenticado = usuarioAutenticado.autenticarUsuario(usuario, senha);
+            foiAutenticado = usuarioAutenticado.autenticar(usuario, senha);
 
             if (!foiAutenticado) {
                 System.out.println("Usuário ou senha inválidos.\n");
             }
         } while (!foiAutenticado);
+
+        MenuPrincipal menu = new MenuPrincipal(usuarioAutenticado.getUsuarioId());
 
         System.out.println("Perfil Autenticado com sucoesso!\nSeja Bem vindo!");
         menu.exibir();

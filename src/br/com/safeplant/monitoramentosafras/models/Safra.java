@@ -1,18 +1,19 @@
-package br.com.safeplant.models;
+package br.com.safeplant.monitoramentosafras.models;
 
-import br.com.safeplant.enums.StatusSafra;
-import br.com.safeplant.interfaces.ISafra;
+import br.com.safeplant.monitoramentosafras.enums.StatusSafra;
+import br.com.safeplant.monitoramentosafras.interfaces.ISafra;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class Safra implements ISafra {
+public class Safra extends Terreno implements ISafra {
     private String id;
     private LocalDateTime dataInicio;
     private LocalDateTime dataFim;
     private StatusSafra status;
 
-    public Safra(LocalDateTime dataInicio, LocalDateTime dataFim) {
+    public Safra(LocalDateTime dataInicio, LocalDateTime dataFim, double latitude, double longitude, double area) {
+        super(latitude, longitude, area);
         this.id = UUID.randomUUID().toString();
         this.dataInicio = dataInicio;
         this.dataFim = dataFim;

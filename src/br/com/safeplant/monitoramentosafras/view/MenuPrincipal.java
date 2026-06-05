@@ -15,23 +15,23 @@ public class MenuPrincipal {
 
     public void exibir() {
         String opcao;
+        System.out.println("\033[1;32m\n\nBEM VINDO AO MONITORAMENTO DE SAFRAS - BY SAFEPLANT\033[m");
         do {
             System.out.flush();
-            System.out.println("Olá " + agricultorAutenticado.getPrimeiroNome() + "!!");
-            System.out.println("\n\nBEM VINDO AO MONITORAMENTO DE SAFRAS BY SAFEPLANT\n");
-            System.out.println("[1] Gerenciamento de Safra");
-            System.out.println("[2] Gerenciamento de Produtos");
-            System.out.println("[3] Meu Perfil");
-            System.out.println("[4] Encerrar Sessão");
+            System.out.println("\033[1;36mOlá " + agricultorAutenticado.getPrimeiroNome() + "!!\033[m\n");
+            System.out.println("\033[1;36m[1]\033[m Gerenciamento de Safra");
+            System.out.println("\033[1;36m[2]\033[m Gerenciamento de Produtos");
+            System.out.println("\033[1;36m[3]\033[m Meu Perfil");
+            System.out.println("\033[1;36m[4]\033[m Encerrar Sessão");
             System.out.print("Escolha uma opção: ");
             opcao = scanner.next();
 
             switch (opcao) {
                 case "1":
-                    new MenuSafra().exibir();
+                    new MenuSafra(agricultorAutenticado).exibir();
                     break;
                 case "2":
-                    new MenuProduto().exibir();
+                    new MenuProduto(agricultorAutenticado).exibir();
                     break;
                 case "3":
                     agricultorAutenticado.exibirMeuPerfil();

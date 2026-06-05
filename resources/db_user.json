@@ -7,7 +7,6 @@
     "sobrenome": "Ferreira",
     "email": "joao.ferreira@email.com",
     "senha": "Joao@1234",
-    "temMfa": false,
     "ativo": true,
     "ultimoAcessoEm": "2026-06-03T07:15:00"
   },
@@ -19,7 +18,6 @@
     "sobrenome": "Santos",
     "email": "maria.santos@email.com",
     "senha": "Mari@1234",
-    "temMfa": true,
     "ativo": true,
     "ultimoAcessoEm": "2026-06-02T14:30:00"
   },
@@ -31,8 +29,18 @@
     "sobrenome": "Pereira",
     "email": "roberto.pereira@email.com",
     "senha": "Robe@1234",
-    "temMfa": false,
     "ativo": false,
     "ultimoAcessoEm": "2026-04-20T10:00:00"
+  },
+  {
+    "usuarioId": "5535b24a-3da7-4160-b547-0d9086a1bdd9",
+    "nomeCompleto": "Luis Felipe Scacchetti",
+    "nomeUsuario": "luis.scacchetti",
+    "primeiroNome": "Luis",
+    "sobrenome": "Felipe Scacchetti",
+    "email": "luis@teste.com",
+    "senha": "12345",
+    "ativo": true,
+    "ultimoAcessoEm": "2026-06-04T22:31:52.675151400"
   }
 ]

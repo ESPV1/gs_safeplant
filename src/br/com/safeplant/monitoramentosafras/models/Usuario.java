@@ -16,10 +16,9 @@ public class Usuario implements IUsuario {
     private String sobrenome;
     private String email;
     private String senha;
-    private boolean temMfa;
     private boolean ativo;
-    private LocalDateTime ultimoAcessoEm;
-    private final IDatabase<Usuario> database;
+    private String ultimoAcessoEm;
+    private final transient IDatabase<Usuario> database;
 
     public Usuario() {
         this.database = new Database<Usuario>();
@@ -31,25 +30,23 @@ public class Usuario implements IUsuario {
         this.nomeUsuario = nomeUsuario;
         this.email = email;
         this.senha = senha;
-        this.ultimoAcessoEm = LocalDateTime.now();
-        this.temMfa = false;
+        this.ultimoAcessoEm = LocalDateTime.now().toString();
         this.ativo = true;
         this.database = new Database<Usuario>();
         this.separacaoNomeCompleto(nomeCompleto);
     }
 
-    public Usuario(String email, String senha, String nomeUsuario, boolean temMfa) {
+    public Usuario(String email, String senha, String nomeUsuario) {
         this.usuarioId = UUID.randomUUID().toString();
         this.nomeUsuario = nomeUsuario;
         this.email = email;
         this.senha = senha;
-        this.temMfa = temMfa;
         this.ativo = true;
-        this.ultimoAcessoEm = LocalDateTime.now();
+        this.ultimoAcessoEm = LocalDateTime.now().toString();
         this.database = new Database<Usuario>();
     }
 
-    public Usuario(LocalDateTime ultimoAcessoEm, boolean ativo, boolean temMfa, String senha, String email, String sobrenome, String primeiroNome, String nomeUsuario, String nomeCompleto, String usuarioId) {
+    public Usuario(String ultimoAcessoEm, boolean ativo, String senha, String email, String sobrenome, String primeiroNome, String nomeUsuario, String nomeCompleto, String usuarioId) {
         this.usuarioId = usuarioId;
         this.nomeCompleto = nomeCompleto;
         this.nomeUsuario = nomeUsuario;
@@ -59,7 +56,6 @@ public class Usuario implements IUsuario {
         this.senha = senha;
         this.ultimoAcessoEm = ultimoAcessoEm;
         this.ativo = ativo;
-        this.temMfa = temMfa;
         this.database = new Database<Usuario>();
         separacaoNomeCompleto(nomeCompleto);
     }
@@ -96,15 +92,7 @@ public class Usuario implements IUsuario {
         this.senha = senha;
     }
 
-    public boolean isTemMfa() {
-        return temMfa;
-    }
-
-    public void setTemMfa(boolean temMfa) {
-        this.temMfa = temMfa;
-    }
-
-    public boolean isAtivo() {
+    public boolean getAtivo() {
         return ativo;
     }
 
@@ -112,11 +100,11 @@ public class Usuario implements IUsuario {
         this.ativo = ativo;
     }
 
-    public LocalDateTime getUltimoAcessoEm() {
+    public String getUltimoAcessoEm() {
         return ultimoAcessoEm;
     }
 
-    public void setUltimoAcessoEm(LocalDateTime ultimoAcessoEm) {
+    public void setUltimoAcessoEm(String ultimoAcessoEm) {
         this.ultimoAcessoEm = ultimoAcessoEm;
     }
 
@@ -164,33 +152,39 @@ public class Usuario implements IUsuario {
         return false;
     }
 
-    public boolean verificarUsuario() {
+    public ArrayList<String> verificarUsuario() {
+        ArrayList<String> erros = new ArrayList<String>();
+
         if (getSenha().length() <= 3)
-            return false;
+            erros.add("Senha deve ter mais que 3 caractéres");
+
+        if (getEmail().isEmpty())
+            erros.add("Email é obrigatório");
 
         if (!(getEmail().contains("@") &&
                 getEmail().endsWith(".com") ||
                 getEmail().endsWith(".br") ||
                 getEmail().endsWith(".net"))) {
-            return false;
+            erros.add("Email possuí formato inválido");
         }
 
+        if (getNomeCompleto().isEmpty())
+            erros.add("Nome completo é obrigatório");
+
         if (getNomeCompleto().matches(".*\\d+.*"))
-            return false;
+            erros.add("Nome completo não pode haver números");
+
+        if (getNomeUsuario().isEmpty())
+            erros.add("Nome de usuário é obrigatório");
 
         if (getNomeUsuario().substring(0, 1).matches(".*\\d+.*"))
-            return false;
+            erros.add("Nome de usuário não deve começar com números");
 
-        return true;
+        return erros;
     }
 
     public boolean salvarRegistro() {
-        boolean usuarioValido = verificarUsuario();
-        if (!usuarioValido)
-            return false;
-
-        System.out.println("Usuário cadastrado!");
-        return true;
+        return database.criarRegistro(this, Usuario.class);
     }
 
     public void definirUsuarioAutenticado(Usuario usuario) {
@@ -203,7 +197,6 @@ public class Usuario implements IUsuario {
         setSenha(usuario.senha);
         setUltimoAcessoEm(usuario.ultimoAcessoEm);
         setAtivo(usuario.ativo);
-        setTemMfa(usuario.temMfa);
     }
 
     public void separacaoNomeCompleto(String nomeCompleto) {

@@ -3,20 +3,22 @@ package br.com.safeplant.monitoramentosafras.models;
 import br.com.safeplant.monitoramentosafras.interfaces.IAgricultor;
 import br.com.safeplant.monitoramentosafras.interfaces.IDatabase;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class Agricultor extends Usuario implements IAgricultor {
     private String agricultorId;
     private String enderecoId;
-    private LocalDateTime dataDeNascimento;
+    private String dataDeNascimento;
     private int idade;
     private String celular;
     private String cpf;
-    private static IDatabase<Agricultor> database = new Database<Agricultor>();
+    private static final IDatabase<Agricultor> database = new Database<Agricultor>();
 
-    public Agricultor(String agricultorId, LocalDateTime ultimoAcessoEm, boolean ativo, boolean temMfa, String senha, String email, String sobrenome, String primeiroNome, String nomeUsuario, String nomeCompleto, String usuarioId, String enderecoId, LocalDateTime dataDeNascimento, int idade, String celular, String cpf) {
-        super(ultimoAcessoEm, ativo, temMfa, senha, email, sobrenome, primeiroNome, nomeUsuario, nomeCompleto, usuarioId);
+    public Agricultor(String agricultorId, String ultimoAcessoEm, boolean ativo, String senha, String email, String sobrenome, String primeiroNome, String nomeUsuario, String nomeCompleto, String usuarioId, String enderecoId, String dataDeNascimento, int idade, String celular, String cpf) {
+        super(ultimoAcessoEm, ativo, senha, email, sobrenome, primeiroNome, nomeUsuario, nomeCompleto, usuarioId);
         this.agricultorId = agricultorId;
         this.cpf = cpf;
         this.enderecoId = enderecoId;
@@ -25,7 +27,7 @@ public class Agricultor extends Usuario implements IAgricultor {
         this.idade = idade;
     }
 
-    public Agricultor(String nomeCompleto, String email, String senha, String nomeUsuario, String enderecoId, LocalDateTime dataDeNascimento, String celular, String cpf) {
+    public Agricultor(String nomeCompleto, String email, String senha, String nomeUsuario, String enderecoId, String dataDeNascimento, String celular, String cpf) {
         super(nomeCompleto, nomeUsuario, email, senha);
         this.enderecoId = enderecoId;
         this.dataDeNascimento = dataDeNascimento;
@@ -34,11 +36,21 @@ public class Agricultor extends Usuario implements IAgricultor {
         this.idade = calcularIdade();
     }
 
-    public LocalDateTime getDataDeNascimento() {
+    public Agricultor(Usuario usuario, String cpf, String enderecoId, String dataDeNascimento, String celular) {
+        super(usuario.getUltimoAcessoEm(), usuario.getAtivo(), usuario.getSenha(), usuario.getEmail(), usuario.getSobrenome(), usuario.getPrimeiroNome(), usuario.getNomeUsuario(), usuario.getNomeCompleto(), usuario.getUsuarioId());
+        this.agricultorId = UUID.randomUUID().toString();
+        this.cpf = cpf;
+        this.enderecoId = enderecoId;
+        this.dataDeNascimento = dataDeNascimento;
+        this.celular = celular;
+        this.idade = calcularIdade();
+    }
+
+    public String getDataDeNascimento() {
         return dataDeNascimento;
     }
 
-    private void setDataDeNascimento(LocalDateTime dataDeNascimento) {
+    private void setDataDeNascimento(String dataDeNascimento) {
         this.dataDeNascimento = dataDeNascimento;
     }
 
@@ -55,10 +67,6 @@ public class Agricultor extends Usuario implements IAgricultor {
     }
 
     private void setCpf(String cpf) {
-        if (cpf.length() != 11)
-            return;
-        if (cpf.matches("[a-zA-Z]"))
-            return;
         this.cpf = cpf;
     }
 
@@ -87,15 +95,15 @@ public class Agricultor extends Usuario implements IAgricultor {
     }
 
     public int calcularIdade() {
-        LocalDateTime nascimento = getDataDeNascimento();
-        LocalDateTime hoje = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate nascimento = LocalDate.parse(getDataDeNascimento(), formatter);
+        LocalDate hoje = LocalDate.now();
 
         int idade = hoje.getYear() - nascimento.getYear();
 
         if (hoje.getMonthValue() < nascimento.getMonthValue() ||
-                (hoje.getMonthValue() == nascimento.getMonthValue() && hoje.getDayOfMonth() < nascimento.getDayOfMonth())) {
+                (hoje.getMonthValue() == nascimento.getMonthValue() && hoje.getDayOfMonth() < nascimento.getDayOfMonth()))
             idade--;
-        }
 
         return idade;
     }
@@ -103,7 +111,6 @@ public class Agricultor extends Usuario implements IAgricultor {
     public static Agricultor GetAgricultorPorUsuarioId(String usuarioId) {
         try {
             ArrayList<Agricultor> agricultores = database.lerRegistro(Agricultor.class);
-
             if (agricultores != null) {
                 for (Agricultor agro : agricultores) {
                     if (agro.getUsuarioId().equals(usuarioId))
@@ -111,12 +118,47 @@ public class Agricultor extends Usuario implements IAgricultor {
                 }
             }
 
+
             return null;
         }
         catch (Exception ex) {
             System.out.println("Ocorreu um erro Inesperado durante a busca pelo agricultor");
             throw ex;
         }
+    }
+
+    public ArrayList<String> verificarAgro() {
+        ArrayList<String> erros = new ArrayList<String>();
+
+        if (getCpf().length() != 11)
+            erros.add("CPF deve ter 11 caractéres");
+
+        if (getCpf().matches(".*[a-zA-Z].*"))
+            erros.add("CPF não deve conter letras");
+
+        if (getCelular().length() != 11)
+            erros.add("Celular deve ter 11 caractéres");
+
+        if (getCelular().charAt(2) != '9')
+            erros.add("Celular deve começar com 9");
+
+        if (getDataDeNascimento().split("/").length == 3) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate cast = LocalDate.parse(getDataDeNascimento(), formatter);
+
+            int ano = cast.getYear();
+            if (ano < LocalDate.now().getYear() - 120 || ano > LocalDate.now().getYear() - 10)
+                erros.add("Data de nascimento inválida");
+        }
+        else
+            erros.add("Formatação de data de nascimento inválida: DD/MM/YYYY");
+
+        return erros;
+    }
+
+    @Override
+    public boolean salvarRegistro() {
+        return database.criarRegistro(this, Agricultor.class);
     }
 
     public void exibirMeuPerfil() {

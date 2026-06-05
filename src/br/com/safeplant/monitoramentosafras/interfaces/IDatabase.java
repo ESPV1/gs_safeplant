@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public interface IDatabase<T> {
     ArrayList<T> lerRegistro(Class<T> classe);
-    boolean criarRegistro(T entidade);
-    boolean editarRegistro(T entidade);
-    boolean removerRegistro(T entidade);
+    boolean criarRegistro(T entidade, Class<T> classe);
+    boolean editarRegistro(T entidade, Class<T> classe);
+    boolean removerRegistro(T entidade, Class<T> classe);
 }

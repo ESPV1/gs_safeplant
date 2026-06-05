@@ -3,25 +3,20 @@ package br.com.safeplant.monitoramentosafras.models;
 import br.com.safeplant.monitoramentosafras.interfaces.IDatabase;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializer;
 import com.google.gson.reflect.TypeToken;
-
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Database<T> implements IDatabase<T> {
     private final Gson gson;
 
     public Database() {
-        this.gson = new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, (JsonDeserializer<LocalDateTime>) (json, type, context) ->
-                        LocalDateTime.parse(json.getAsString()))
-                .create();
+        this.gson = new GsonBuilder().setPrettyPrinting().create();
     }
 
     /**
@@ -31,13 +26,14 @@ public class Database<T> implements IDatabase<T> {
         try {
             String nomeBanco = getNomeBanco(classe.getSimpleName());
             if (nomeBanco.isEmpty())
-                return null;
+                return new ArrayList<T>();
 
             URL url = getClass().getClassLoader().getResource(nomeBanco);
             String jsonUsers = Files.readString(Paths.get(url.toURI()), StandardCharsets.UTF_8);
             Type type = TypeToken.getParameterized(ArrayList.class, classe).getType();
 
-            return gson.fromJson(jsonUsers, type);
+            ArrayList<T> registros = gson.fromJson(jsonUsers, type);
+            return registros;
         }
         catch (Exception ex) {
             System.out.println("Ocorreu um erro na leitura dos dados");
@@ -49,7 +45,34 @@ public class Database<T> implements IDatabase<T> {
      * @param entidade
      * @return
      */
-    public boolean criarRegistro(T entidade) {
+    public boolean criarRegistro(T entidade, Class<T> classe) {
+        try {
+            Path path = getPathBanco(entidade.getClass());
+            if (path == null)
+                return false;
+
+            ArrayList<T> registros = lerRegistro(classe);
+            if (registros == null)
+                registros = new ArrayList<>();
+
+            registros.add(entidade);
+
+            Files.writeString(path, gson.toJson(registros), StandardCharsets.UTF_8);
+
+            return true;
+        }
+        catch (Exception ex) {
+            System.out.println("Ocorreu um erro ao salvar o registro");
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * @param entidade
+     * @return
+     */
+    public boolean editarRegistro(T entidade, Class<T> classe) {
         return false;
     }
 
@@ -57,16 +80,27 @@ public class Database<T> implements IDatabase<T> {
      * @param entidade
      * @return
      */
-    public boolean editarRegistro(T entidade) {
-        return false;
-    }
+    public boolean removerRegistro(T entidade, Class<T> classe) {
+        try {
+            Path path = getPathBanco(entidade.getClass());
+            if (path == null)
+                return false;
 
-    /**
-     * @param entidade
-     * @return
-     */
-    public boolean removerRegistro(T entidade) {
-        return false;
+            ArrayList<T> registros = lerRegistro(classe);
+            if (registros == null)
+                registros = new ArrayList<>();
+
+            registros.remove(entidade);
+
+            Files.writeString(path, gson.toJson(registros), StandardCharsets.UTF_8);
+
+            return true;
+        }
+        catch (Exception ex) {
+            System.out.println("Ocorreu um erro ao remover o registro");
+            ex.printStackTrace();
+            return false;
+        }
     }
 
     private String getNomeBanco(String nomeEntidade) {
@@ -82,5 +116,13 @@ public class Database<T> implements IDatabase<T> {
             default:
                 return "";
         }
+    }
+
+    private Path getPathBanco(Class<?> classe) {
+        String nomeBanco = getNomeBanco(classe.getSimpleName());
+        if (nomeBanco.isEmpty())
+            return null;
+
+        return Paths.get(System.getProperty("user.dir"), "resources", nomeBanco);
     }
 }

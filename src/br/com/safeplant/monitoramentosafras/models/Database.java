@@ -24,20 +24,17 @@ public class Database<T> implements IDatabase<T> {
      */
     public ArrayList<T> lerRegistro(Class<T> classe) {
         try {
-            String nomeBanco = getNomeBanco(classe.getSimpleName());
-            if (nomeBanco.isEmpty())
-                return new ArrayList<T>();
-
-            URL url = getClass().getClassLoader().getResource(nomeBanco);
-            String jsonUsers = Files.readString(Paths.get(url.toURI()), StandardCharsets.UTF_8);
+            Path path = getPathBanco(classe);
+            String json = Files.readString(path, StandardCharsets.UTF_8);
             Type type = TypeToken.getParameterized(ArrayList.class, classe).getType();
 
-            ArrayList<T> registros = gson.fromJson(jsonUsers, type);
-            return registros;
+            ArrayList<T> registros = gson.fromJson(json, type);
+            return registros != null ? registros : new ArrayList<T>();
         }
         catch (Exception ex) {
             System.out.println("Ocorreu um erro na leitura dos dados");
-            return null;
+            ex.printStackTrace();
+            return new ArrayList<T>();
         }
     }
 

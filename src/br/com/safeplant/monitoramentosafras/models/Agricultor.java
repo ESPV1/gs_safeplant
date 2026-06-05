@@ -1,5 +1,6 @@
 package br.com.safeplant.monitoramentosafras.models;
 
+import br.com.safeplant.monitoramentosafras.helper.Verificador;
 import br.com.safeplant.monitoramentosafras.interfaces.IAgricultor;
 import br.com.safeplant.monitoramentosafras.interfaces.IDatabase;
 
@@ -95,8 +96,13 @@ public class Agricultor extends Usuario implements IAgricultor {
     }
 
     public int calcularIdade() {
+        String dataNascimento = getDataDeNascimento();
+
+        if (!Verificador.verificarDataNascimento(dataNascimento))
+            return 0;
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate nascimento = LocalDate.parse(getDataDeNascimento(), formatter);
+        LocalDate nascimento = LocalDate.parse(dataNascimento, formatter);
         LocalDate hoje = LocalDate.now();
 
         int idade = hoje.getYear() - nascimento.getYear();
@@ -130,11 +136,8 @@ public class Agricultor extends Usuario implements IAgricultor {
     public ArrayList<String> verificarAgro() {
         ArrayList<String> erros = new ArrayList<String>();
 
-        if (getCpf().length() != 11)
-            erros.add("CPF deve ter 11 caractéres");
-
-        if (getCpf().matches(".*[a-zA-Z].*"))
-            erros.add("CPF não deve conter letras");
+        if (!Verificador.verificarCPF(getCpf()))
+            erros.add("CPF inválido. Formatação adequada: deve ter 11 caractéres e somente números.");
 
         if (getCelular().length() != 11)
             erros.add("Celular deve ter 11 caractéres");
@@ -142,7 +145,7 @@ public class Agricultor extends Usuario implements IAgricultor {
         if (getCelular().charAt(2) != '9')
             erros.add("Celular deve começar com 9");
 
-        if (getDataDeNascimento().split("/").length == 3) {
+        if (Verificador.verificarDataNascimento(getDataDeNascimento())) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate cast = LocalDate.parse(getDataDeNascimento(), formatter);
 

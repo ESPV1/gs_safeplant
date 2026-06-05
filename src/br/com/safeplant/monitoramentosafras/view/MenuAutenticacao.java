@@ -1,12 +1,10 @@
 package br.com.safeplant.monitoramentosafras.view;
 
+import java.io.Console;
+import java.util.ArrayList;
+import java.util.Scanner;
 import br.com.safeplant.monitoramentosafras.models.Agricultor;
 import br.com.safeplant.monitoramentosafras.models.Usuario;
- import br.com.safeplant.monitoramentosafras.view.MenuPrincipal;
-
- import java.io.Console;
- import java.util.ArrayList;
- import java.util.Scanner;
 
 public class MenuAutenticacao {
     private final Scanner scanner;
@@ -57,7 +55,7 @@ public class MenuAutenticacao {
     public void exibirCadastro() {
         System.out.println("\n\n\033[1;32m=====| CADASTRO DE USUARIO (1/2) |=====\033[m\n");
 
-        boolean usuarioValido;
+        boolean usuarioValido = true;
         Usuario novoUsuario;
         do {
             System.out.println("Digite as informações solicitadas abaixo:\n");
@@ -83,11 +81,13 @@ public class MenuAutenticacao {
                 usuarioValido = false;
                 continue;
             }
-            usuarioValido = novoUsuario.salvarRegistro();
+            usuarioValido = true;
 
         } while(!usuarioValido);
 
         System.out.println("\n\n\033[1;32m=====| CADASTRO DE AGRICULTOR (2/2) |=====\033[m\n");
+
+        Agricultor novoAgro;
         boolean agricultorValido;
         do {
             System.out.println("Digite as informações solicitadas abaixo:\n");
@@ -101,7 +101,7 @@ public class MenuAutenticacao {
             System.out.print("Celular: ");
             String celular = scanner.nextLine();
 
-            Agricultor novoAgro = new Agricultor(novoUsuario, cpf, "end-004", dataNascimento, celular);
+            novoAgro = new Agricultor(novoUsuario, cpf, "end-004", dataNascimento, celular);
             ArrayList<String> validacaoMensagem = novoAgro.verificarAgro();
 
             if (!validacaoMensagem.isEmpty()) {
@@ -111,12 +111,21 @@ public class MenuAutenticacao {
                 agricultorValido = false;
                 continue;
             }
-            agricultorValido = novoAgro.salvarRegistro();
+            agricultorValido = true;
 
         } while (!agricultorValido);
-        System.out.println("Autenticação e Registro foram concluidos! Autentica-se e acesse!");
 
-        exibirLogin();
+        usuarioValido = novoUsuario.salvarRegistro();
+        agricultorValido = novoAgro.salvarRegistro();
+
+        if (usuarioValido && agricultorValido) {
+            System.out.println("Autenticação e Registro foram concluidos! Autentica-se e acesse!");
+            exibirLogin();
+        }
+        else {
+            System.out.printf("Ocorreu um erro durante o registro do %s.", !usuarioValido ? "usuario" : "agricultor");
+            exibirCadastro();
+        }
     }
 
     private String lerSenha() {

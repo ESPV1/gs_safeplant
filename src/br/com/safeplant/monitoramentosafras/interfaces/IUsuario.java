@@ -4,10 +4,9 @@ import br.com.safeplant.monitoramentosafras.models.Usuario;
 
 import java.util.ArrayList;
 
-public interface IUsuario {
+public interface IUsuario extends IOperacoesPadrao {
     ArrayList<String> verificarUsuario();
     boolean autenticar(String usuario, String senha);
-    boolean salvarRegistro();
     void definirUsuarioAutenticado(Usuario usuario);
     void separacaoNomeCompleto(String nomeCompleto);
 }

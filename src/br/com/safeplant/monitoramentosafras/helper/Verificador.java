@@ -45,4 +45,9 @@ public class Verificador {
             return 0;
         return Integer.parseInt(valor);
     }
+
+    public static boolean verificarCEP(String cep) {
+        cep = cep.replaceAll("[^\\d]", "");
+        return cep.length() == 8;
+    }
 }

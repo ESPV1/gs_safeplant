@@ -1,0 +1,24 @@
+[
+  {
+    "id": "1d523e05-6094-4e0c-8858-1df00f09f1ab",
+    "cep": "04094-050",
+    "logradouro": "Avenida Pedro Álvares Cabral",
+    "numero": "11",
+    "bairro": "Parque Ibirapuera",
+    "localidade": "São Paulo",
+    "regiao": "Sudeste",
+    "uf": "SP",
+    "complemento": ""
+  },
+  {
+    "id": "cf220c71-9e81-4fab-a4c9-4d22c3c814c5",
+    "cep": "04224-050",
+    "logradouro": "Rua Teste",
+    "numero": "11",
+    "bairro": "Bairro Teste",
+    "localidade": "Cidade Teste",
+    "regiao": "Teste",
+    "uf": "TE",
+    "complemento": ""
+  }
+]

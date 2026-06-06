@@ -1,5 +1,6 @@
 package br.com.safeplant.monitoramentosafras;
 
+import br.com.safeplant.monitoramentosafras.models.Endereco;
 import br.com.safeplant.monitoramentosafras.view.MenuAutenticacao;
 
 public class Main {

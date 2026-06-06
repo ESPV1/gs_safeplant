@@ -70,7 +70,27 @@ public class Database<T> implements IDatabase<T> {
      * @return
      */
     public boolean editarRegistro(T entidade, Class<T> classe) {
-        return false;
+        try {
+            Path path = getPathBanco(entidade.getClass());
+            if (path == null)
+                return false;
+
+            ArrayList<T> registros = lerRegistro(classe);
+            if (registros == null)
+                return false;
+
+            int indexEndereco = registros.indexOf(entidade);
+            registros.add(indexEndereco, entidade);
+
+            Files.writeString(path, gson.toJson(registros), StandardCharsets.UTF_8);
+
+            return true;
+        }
+        catch (Exception ex) {
+            System.out.println("Ocorreu um erro ao salvar o registro");
+            ex.printStackTrace();
+            return false;
+        }
     }
 
     /**
@@ -100,6 +120,21 @@ public class Database<T> implements IDatabase<T> {
         }
     }
 
+    /**
+     * @param json
+     * @return
+     */
+    public T converterJsonParaJava(String json, Class<T> classe) {
+        try {
+            return gson.fromJson(json, classe);
+        }
+        catch (Exception ex) {
+            System.out.println("Ocorreu um erro ao remover o registro");
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
     private String getNomeBanco(String nomeEntidade) {
         switch (nomeEntidade.toLowerCase()) {
             case "usuario":
@@ -110,6 +145,8 @@ public class Database<T> implements IDatabase<T> {
                 return "db_safra.json";
             case "produto":
                 return "db_prod.json";
+            case "endereco":
+                return "db_endereco.json";
             default:
                 return "";
         }

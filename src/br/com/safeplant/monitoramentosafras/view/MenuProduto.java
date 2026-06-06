@@ -1,6 +1,7 @@
 package br.com.safeplant.monitoramentosafras.view;
 
 import br.com.safeplant.monitoramentosafras.enums.TipoProduto;
+import br.com.safeplant.monitoramentosafras.helper.Interacao;
 import br.com.safeplant.monitoramentosafras.helper.Verificador;
 import br.com.safeplant.monitoramentosafras.models.Agricultor;
 import br.com.safeplant.monitoramentosafras.models.Produto;
@@ -96,16 +97,18 @@ public class MenuProduto {
         Produto novoProduto;
         do {
             System.out.println("Digite as informações solicitadas abaixo: ");
-            System.out.print("Nome: ");
-            String nome = scanner.nextLine();
+            System.out.println("Digite \033[1;31mSair\033[m para encerrar o cadastro.");
 
-            System.out.print("Nome Científico: ");
-            String nomeCientifico = scanner.nextLine();
+            String nome = Interacao.inputString("Nome: ");
+            if (Interacao.verificarSaida(nome)) return;
+
+            String nomeCientifico = Interacao.inputString("Nome Científico: ");
+            if (Interacao.verificarSaida(nomeCientifico)) return;
 
             TipoProduto tipoProduto = selecionarTipoProduto();
 
-            System.out.print("Tempo médio da colheita em dias: ");
-            int diasColheita = Verificador.verificarInteiro(scanner.nextLine());
+            int diasColheita = Interacao.inputInteiro("Tempo médio da colheita em dias: ");
+            if (diasColheita == -1) return;
 
             novoProduto = new Produto(nome, nomeCientifico, diasColheita, tipoProduto, agricultor.getAgricultorId());
             ArrayList<String> erros = novoProduto.verificarRegistroProduto();

@@ -7,4 +7,5 @@ public interface IDatabase<T> {
     boolean criarRegistro(T entidade, Class<T> classe);
     boolean editarRegistro(T entidade, Class<T> classe);
     boolean removerRegistro(T entidade, Class<T> classe);
+    T converterJsonParaJava(String json, Class<T> classe);
 }

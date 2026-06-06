@@ -124,7 +124,6 @@ public class Agricultor extends Usuario implements IAgricultor {
                 }
             }
 
-
             return null;
         }
         catch (Exception ex) {
@@ -159,15 +158,9 @@ public class Agricultor extends Usuario implements IAgricultor {
         return erros;
     }
 
-    @Override
-    public boolean salvarRegistro() {
-        return database.criarRegistro(this, Agricultor.class);
-    }
-
     public void exibirMeuPerfil() {
         System.out.flush();
-        System.out.println("PERFIL DO AGRICULTOR(A) " + getPrimeiroNome().toUpperCase() + "\n");
-        System.out.println("=====| INFORMAÇÕES PESSOAIS |=====");
+        System.out.println("\033[1;32m\n\n=====| INFORMAÇÕES PESSOAIS |=====\033[m");
         System.out.printf("Nome Completo: %s\n", getNomeCompleto());
         System.out.printf("Data de Nascimento: %s\n", getDataDeNascimento());
         System.out.printf("Idade: %d anos\n", getIdade());
@@ -175,11 +168,48 @@ public class Agricultor extends Usuario implements IAgricultor {
         System.out.printf("CPF: %s\n", getCpf());
         System.out.printf("Celular: %s", getCelular());
 
-        System.out.println("\n=====| CREDENCIAIS |=====");
+        System.out.println("\033[1;32m\n\n=====| CREDENCIAIS DE ACESSO |=====\033[m");
         System.out.printf("Email: %s\n", getEmail());
         System.out.printf("Senha: %s", getSenha());
 
-        System.out.println("\n=====| ENDEREÇO |=====");
-        System.out.printf("EndereçoId: %s\n", getEnderecoId());
+        Endereco meuEndereco = Endereco.BuscarPorId(getEnderecoId());
+        if (meuEndereco == null) return;
+        System.out.println("\033[1;32m\n\n=====| ENDEREÇO REGISTRADO |=====\033[m");
+        meuEndereco.exibirInfosCep(true);
+        System.out.printf("Complemento: %s\n", meuEndereco.getComplemento());
+        System.out.printf("Número: %s\n", meuEndereco.getNumero());
+    }
+
+    /**
+     * @return
+     */
+    public boolean adicionar() {
+        try {
+            return database.criarRegistro(this, Agricultor.class);
+        }
+        catch (Exception ex) {
+            System.out.println("Ocorreu um erro Inesperado durante a busca pelo agricultor");
+            throw ex;
+        }
+    }
+
+    /**
+     * @return
+     */
+    public boolean remover() {
+        return false;
+    }
+
+    /**
+     * @return
+     */
+    public boolean editar() {
+        try {
+            return database.editarRegistro(this, Agricultor.class);
+        }
+        catch (Exception ex) {
+            System.out.println("Ocorreu um erro Inesperado durante a busca pelo agricultor");
+            throw ex;
+        }
     }
 }

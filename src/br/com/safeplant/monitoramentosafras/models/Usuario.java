@@ -183,8 +183,28 @@ public class Usuario implements IUsuario {
         return erros;
     }
 
-    public boolean salvarRegistro() {
-        return database.criarRegistro(this, Usuario.class);
+    public boolean adicionar() {
+        try {
+            return database.criarRegistro(this, Usuario.class);
+        }
+        catch (Exception ex) {
+            System.out.println("Ocorreu um erro inesperado durante o registro do usuário");
+            return false;
+        }
+    }
+
+    /**
+     * @return
+     */
+    public boolean remover() {
+        return false;
+    }
+
+    /**
+     * @return
+     */
+    public boolean editar() {
+        return false;
     }
 
     public void definirUsuarioAutenticado(Usuario usuario) {

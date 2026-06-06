@@ -3,7 +3,10 @@ package br.com.safeplant.monitoramentosafras.view;
 import java.io.Console;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import br.com.safeplant.monitoramentosafras.helper.Interacao;
 import br.com.safeplant.monitoramentosafras.models.Agricultor;
+import br.com.safeplant.monitoramentosafras.models.Endereco;
 import br.com.safeplant.monitoramentosafras.models.Usuario;
 
 public class MenuAutenticacao {
@@ -25,7 +28,6 @@ public class MenuAutenticacao {
             System.out.print("Usuário: ");
             String usuario = this.scanner.nextLine().trim();
             if (usuario.equals("1")) {
-                scanner.nextLine(); // Limpa o console
                 exibirCadastro();
                 return;
             }
@@ -46,70 +48,25 @@ public class MenuAutenticacao {
 
 
     public void exibirCadastro() {
-        System.out.println("\n\n\033[1;32m=====| CADASTRO DE USUARIO (1/2) |=====\033[m\n");
+        System.out.println("\n\n\033[1;32m=====| CADASTRO DE USUARIO (1/3) |=====\033[m\n");
+        Usuario novoUsuario = exibirCadastroUsuario();
+        if (novoUsuario == null) return;
 
-        boolean usuarioValido;
-        Usuario novoUsuario;
-        do {
-            System.out.println("Digite as informações solicitadas abaixo:\n");
+        System.out.println("\n\n\033[1;32m=====| CADASTRO DE AGRICULTOR (2/3) |=====\033[m\n");
+        Agricultor novoAgro = exibirCadastroAgricultor(novoUsuario);
+        if (novoAgro == null) return;
 
-            System.out.print("Nome Completo: ");
-            String nomeCompleto = scanner.nextLine();
+        System.out.println("\n\n\033[1;32m=====| CADASTRO DE ENDERECO DO AGRICULTOR (3/3) |=====\033[m\n");
+        Endereco novoEndereco = exibirCadastroEndereco(novoAgro);
 
-            System.out.print("Nome de Usuário: ");
-            String nomeUsuario = scanner.nextLine().trim();
-
-            System.out.print("Email: ");
-            String email = scanner.nextLine().trim();
-
-            String senha = lerSenha().trim();
-
-            novoUsuario = new Usuario(nomeCompleto, nomeUsuario, email, senha);
-            ArrayList<String> validacaoMensagem = novoUsuario.verificarUsuario();
-
-            if (!validacaoMensagem.isEmpty()) {
-                System.out.println("\n\033[1;31mErros encontrados: \033[m");
-                validacaoMensagem.forEach(msg -> System.out.println(msg));
-                System.out.println();
-                usuarioValido = false;
-                continue;
-            }
-            usuarioValido = true;
-
-        } while(!usuarioValido);
-
-        System.out.println("\n\n\033[1;32m=====| CADASTRO DE AGRICULTOR (2/2) |=====\033[m\n");
-
-        Agricultor novoAgro;
-        boolean agricultorValido;
-        do {
-            System.out.println("Digite as informações solicitadas abaixo:\n");
-
-            System.out.print("CPF: ");
-            String cpf = scanner.nextLine();
-
-            System.out.print("Data de Nascimento: ");
-            String dataNascimento = scanner.nextLine();
-
-            System.out.print("Celular: ");
-            String celular = scanner.nextLine();
-
-            novoAgro = new Agricultor(novoUsuario, cpf, "end-004", dataNascimento, celular);
-            ArrayList<String> validacaoMensagem = novoAgro.verificarAgro();
-
-            if (!validacaoMensagem.isEmpty()) {
-                System.out.println("\n\033[1;31mErros encontrados: \033[m");
-                validacaoMensagem.forEach(msg -> System.out.println(msg));
-                System.out.println();
-                agricultorValido = false;
-                continue;
-            }
-            agricultorValido = true;
-
-        } while (!agricultorValido);
-
-        usuarioValido = novoUsuario.salvarRegistro();
-        agricultorValido = novoAgro.salvarRegistro();
+        boolean usuarioValido = novoUsuario.adicionar();
+        boolean enderecoValido = novoEndereco.adicionar();
+        if (!enderecoValido) {
+            System.out.println("Ocorreu um erro ao cadastraro endereço do Agricultor");
+            return;
+        }
+        novoAgro.setEnderecoId(novoEndereco.getId());
+        boolean agricultorValido = novoAgro.adicionar();
 
         if (usuarioValido && agricultorValido) {
             System.out.println("Autenticação e Registro foram concluidos! Autentica-se e acesse!");
@@ -128,5 +85,122 @@ public class MenuAutenticacao {
             System.out.print("Senha: ");
             return scanner.nextLine();
         }
+    }
+
+    private Usuario exibirCadastroUsuario() {
+        Usuario novoUsuario;
+        boolean usuarioValido;
+        do {
+            System.out.println("Digite \033[1;31mSair\033[m para encerrar o cadastro.");
+            System.out.println("Digite as informações solicitadas abaixo:\n");
+
+            String nomeCompleto = Interacao.inputString("Nome Completo: ");
+            if (Interacao.verificarSaida(nomeCompleto)) return null;
+
+            String nomeUsuario = Interacao.inputString("Nome de Usuário: ");
+            if (Interacao.verificarSaida(nomeUsuario)) return null;
+
+            String email = Interacao.inputString("Email: ");
+            if (Interacao.verificarSaida(email)) return null;
+
+            String senha = lerSenha().trim();
+            if (Interacao.verificarSaida(senha)) return null;
+
+            novoUsuario = new Usuario(nomeCompleto, nomeUsuario, email, senha);
+            ArrayList<String> validacaoMensagem = novoUsuario.verificarUsuario();
+
+            if (!validacaoMensagem.isEmpty()) {
+                System.out.println("\n\033[1;31mErros encontrados: \033[m");
+                validacaoMensagem.forEach(msg -> System.out.println(msg));
+                System.out.println();
+                usuarioValido = false;
+                continue;
+            }
+            usuarioValido = true;
+
+        } while(!usuarioValido);
+
+        return novoUsuario;
+    }
+
+    private Agricultor exibirCadastroAgricultor(Usuario novoUsuario) {
+        Agricultor novoAgro;
+        boolean agricultorValido;
+        do {
+            System.out.println("Digite \033[1;31mSair\033[m para encerrar o cadastro.");
+            System.out.println("Digite as informações solicitadas abaixo:\n");
+
+            String cpf = Interacao.inputString("CPF: ");
+            if (Interacao.verificarSaida(cpf)) return null;
+
+            String dataNascimento = Interacao.inputString("Data de Nascimento: ");
+            if (Interacao.verificarSaida(dataNascimento)) return null;
+
+            String celular = Interacao.inputString("Celular: ");
+            if (Interacao.verificarSaida(celular)) return null;
+
+            novoAgro = new Agricultor(novoUsuario, cpf, "end-004", dataNascimento, celular);
+            ArrayList<String> validacaoMensagem = novoAgro.verificarAgro();
+
+            if (!validacaoMensagem.isEmpty()) {
+                System.out.println("\n\033[1;31mErros encontrados: \033[m");
+                validacaoMensagem.forEach(msg -> System.out.println(msg));
+                System.out.println();
+                agricultorValido = false;
+                continue;
+            }
+            agricultorValido = true;
+
+        } while (!agricultorValido);
+
+        return novoAgro;
+    }
+
+    private Endereco exibirCadastroEndereco(Agricultor novoAgro) {
+        System.out.println("Digite \033[1;31mSair\033[m para encerrar o cadastro.");
+        System.out.println("Digite as informações solicitadas abaixo:\n");
+
+        boolean buscaPorCep;
+        Endereco novoEndereco = new Endereco();
+        do {
+            String cep = Interacao.inputString("CEP: ");
+            Endereco enderecoPorCep = Endereco.BuscarEnderecoPorCep(cep);
+            if (enderecoPorCep == null) {
+                System.out.println("\033[1;93m⚠ CEP não encontrado ou inválido.\033[m");
+                buscaPorCep = Interacao.inputBooleano("Deseja continuar com o cadastro manual? [s/n]: ");
+                if (buscaPorCep) {
+                    novoEndereco.setCep(cep);
+                    novoEndereco.setLogradouro(Interacao.inputString("Logradouro: "));
+                    novoEndereco.setBairro(Interacao.inputString("Bairro: "));
+                    novoEndereco.setLocalidade(Interacao.inputString("Cidade: "));
+                    novoEndereco.setUf(Interacao.inputString("UF: "));
+                    novoEndereco.setRegiao(Interacao.inputString("Região: "));
+                    novoEndereco.setNumero(Interacao.inputString("Número: "));
+                    novoEndereco.setComplemento(Interacao.inputString("Complemento: "));
+                }
+            } else {
+                enderecoPorCep.exibirInfosCep(false);
+                buscaPorCep = Interacao.inputBooleano("\nConfirma o endereço acima? [s/n]: ");
+                if (buscaPorCep) {
+                    System.out.println("Endereço Salvo!\n");
+                    novoEndereco = enderecoPorCep;
+                    novoEndereco.setNumero(Interacao.inputString("Número: "));
+                    if (enderecoPorCep.getComplemento().isEmpty())
+                        novoEndereco.setComplemento(Interacao.inputString("Complemento: "));
+                }
+            }
+            if (!buscaPorCep) continue;
+
+            ArrayList<String> erros = novoEndereco.verificarEndereco();
+            if (!erros.isEmpty()) {
+                System.out.println("\n\033[1;31mErros encontrados: \033[m");
+                erros.forEach(msg -> System.out.println(msg));
+                System.out.println();
+                buscaPorCep = false;
+            }
+
+        } while (!buscaPorCep);
+
+        return novoEndereco;
     }
 }

@@ -66,5 +66,39 @@
     "senha": "12345",
     "ativo": true,
     "ultimoAcessoEm": "2026-06-04T22:31:52.675151400"
+  },
+  {
+    "agricultorId": "7248dee7-50aa-4ce7-88cb-37dc37077925",
+    "enderecoId": "1d523e05-6094-4e0c-8858-1df00f09f1ab",
+    "dataDeNascimento": "09/03/2001",
+    "idade": 25,
+    "celular": "11987654321",
+    "cpf": "12309867321",
+    "usuarioId": "1274f7d9-4b4d-4490-af88-b43347fe111f",
+    "nomeCompleto": "Guilherme Godoy",
+    "nomeUsuario": "gui.godoy",
+    "primeiroNome": "Guilherme",
+    "sobrenome": "Godoy",
+    "email": "gui@teste.com",
+    "senha": "gui@123",
+    "ativo": true,
+    "ultimoAcessoEm": "2026-06-06T01:34:01.421612200"
+  },
+  {
+    "agricultorId": "99b9f613-0f5a-479d-9e67-dba78b3d018d",
+    "enderecoId": "cf220c71-9e81-4fab-a4c9-4d22c3c814c5",
+    "dataDeNascimento": "12/10/2000",
+    "idade": 25,
+    "celular": "11987654321",
+    "cpf": "12309845612",
+    "usuarioId": "b42e94cb-bce6-453b-9cba-70dd4a576f60",
+    "nomeCompleto": "Pedro Lucas",
+    "nomeUsuario": "pedro.lucas",
+    "primeiroNome": "Pedro",
+    "sobrenome": "Lucas",
+    "email": "pedro@teste.com",
+    "senha": "pedro@123",
+    "ativo": true,
+    "ultimoAcessoEm": "2026-06-06T01:41:38.442393600"
   }
 ]

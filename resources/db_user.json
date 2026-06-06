@@ -42,5 +42,27 @@
     "senha": "12345",
     "ativo": true,
     "ultimoAcessoEm": "2026-06-04T22:31:52.675151400"
+  },
+  {
+    "usuarioId": "1274f7d9-4b4d-4490-af88-b43347fe111f",
+    "nomeCompleto": "Guilherme Godoy",
+    "nomeUsuario": "gui.godoy",
+    "primeiroNome": "Guilherme",
+    "sobrenome": "Godoy",
+    "email": "gui@teste.com",
+    "senha": "gui@123",
+    "ativo": true,
+    "ultimoAcessoEm": "2026-06-06T01:34:01.421612200"
+  },
+  {
+    "usuarioId": "b42e94cb-bce6-453b-9cba-70dd4a576f60",
+    "nomeCompleto": "Pedro Lucas",
+    "nomeUsuario": "pedro.lucas",
+    "primeiroNome": "Pedro",
+    "sobrenome": "Lucas",
+    "email": "pedro@teste.com",
+    "senha": "pedro@123",
+    "ativo": true,
+    "ultimoAcessoEm": "2026-06-06T01:41:38.442393600"
   }
 ]

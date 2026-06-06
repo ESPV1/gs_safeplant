@@ -38,4 +38,11 @@ public class Verificador {
 
         return !Arrays.asList(invalidCPFs).contains(cpf);
     }
+
+    public static int verificarInteiro(String valor) {
+        valor = valor.trim();
+        if (!valor.matches(".*\\d.*"))
+            return 0;
+        return Integer.parseInt(valor);
+    }
 }

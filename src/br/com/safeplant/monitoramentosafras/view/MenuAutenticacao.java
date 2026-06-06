@@ -18,27 +18,20 @@ public class MenuAutenticacao {
     public void exibirLogin() {
         System.out.println("\n\n\033[1;32m=====| BEM VINDO AO SAFE PLANT |=====\033[m");
 
-        boolean foiAutenticado = false;
+        boolean foiAutenticado;
         Usuario usuarioAutenticado = new Usuario();
         do {
             System.out.println("Faça o \033[;31mLogin\033[m na plataforma ou \033[;31mdigite 1\033[m para cadastrar-se!");
             System.out.print("Usuário: ");
-            String usuario = this.scanner.next();
+            String usuario = this.scanner.nextLine().trim();
             if (usuario.equals("1")) {
                 scanner.nextLine(); // Limpa o console
                 exibirCadastro();
                 return;
             }
-            String senha;
-            if (console != null)
-                senha = new String(this.console.readPassword("Senha: "));
-            else {
-                System.out.print("Senha: ");
-                senha = scanner.next();
-            }
+            String senha = lerSenha().trim();
 
             foiAutenticado = usuarioAutenticado.autenticar(usuario, senha);
-
             if (!foiAutenticado) {
                 System.out.println("Usuário ou senha inválidos.\n");
                 System.out.flush();
@@ -55,7 +48,7 @@ public class MenuAutenticacao {
     public void exibirCadastro() {
         System.out.println("\n\n\033[1;32m=====| CADASTRO DE USUARIO (1/2) |=====\033[m\n");
 
-        boolean usuarioValido = true;
+        boolean usuarioValido;
         Usuario novoUsuario;
         do {
             System.out.println("Digite as informações solicitadas abaixo:\n");
@@ -64,12 +57,12 @@ public class MenuAutenticacao {
             String nomeCompleto = scanner.nextLine();
 
             System.out.print("Nome de Usuário: ");
-            String nomeUsuario = scanner.nextLine();
+            String nomeUsuario = scanner.nextLine().trim();
 
             System.out.print("Email: ");
-            String email = scanner.nextLine();
+            String email = scanner.nextLine().trim();
 
-            String senha = lerSenha();
+            String senha = lerSenha().trim();
 
             novoUsuario = new Usuario(nomeCompleto, nomeUsuario, email, senha);
             ArrayList<String> validacaoMensagem = novoUsuario.verificarUsuario();

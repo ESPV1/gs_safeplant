@@ -24,7 +24,7 @@ public class MenuPrincipal {
             System.out.println("\033[1;36m[3]\033[m Meu Perfil");
             System.out.println("\033[1;36m[4]\033[m Encerrar Sessão");
             System.out.print("Escolha uma opção: ");
-            opcao = scanner.next();
+            opcao = scanner.next().trim();
 
             switch (opcao) {
                 case "1":

@@ -5,22 +5,35 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+/**
+ * Gerencia operações de persistência em arquivos JSON para entidades do sistema.
+ *
+ * @param <T> tipo da entidade gerenciada pelo banco de dados
+ */
 public class Database<T> implements IDatabase<T> {
+    /**
+     * Instância do Gson utilizada para serialização e desserialização de objetos Java para JSON.
+     */
     private final Gson gson;
 
+    /**
+     * Inicializa o banco de dados configurando o Gson com formatação legível.
+     */
     public Database() {
         this.gson = new GsonBuilder().setPrettyPrinting().create();
     }
 
     /**
-     * @return
+     * Lê todos os registros do arquivo JSON correspondente à entidade informada.
+     *
+     * @param classe tipo da entidade a ser lida
+     * @return lista de registros encontrados, ou lista vazia em caso de erro
      */
     public ArrayList<T> lerRegistro(Class<T> classe) {
         try {
@@ -39,8 +52,11 @@ public class Database<T> implements IDatabase<T> {
     }
 
     /**
-     * @param entidade
-     * @return
+     * Adiciona uma nova entidade ao arquivo JSON correspondente.
+     *
+     * @param entidade objeto a ser adicionado
+     * @param classe   tipo da entidade a ser salva
+     * @return {@code true} se salvo com sucesso, {@code false} caso contrário
      */
     public boolean criarRegistro(T entidade, Class<T> classe) {
         try {
@@ -66,8 +82,11 @@ public class Database<T> implements IDatabase<T> {
     }
 
     /**
-     * @param entidade
-     * @return
+     * Substitui uma entidade existente no arquivo JSON pelo objeto atualizado.
+     *
+     * @param entidade objeto que será atualizado
+     * @param classe   tipo da entidade a ser editada
+     * @return {@code true} se editado com sucesso, {@code false} caso contrário
      */
     public boolean editarRegistro(T entidade, Class<T> classe) {
         try {
@@ -94,8 +113,11 @@ public class Database<T> implements IDatabase<T> {
     }
 
     /**
-     * @param entidade
-     * @return
+     * Remove uma entidade do arquivo JSON correspondente.
+     *
+     * @param entidade objeto a ser removido
+     * @param classe   tipo da entidade a ser removida
+     * @return {@code true} se removido com sucesso, {@code false} caso contrário
      */
     public boolean removerRegistro(T entidade, Class<T> classe) {
         try {
@@ -121,8 +143,11 @@ public class Database<T> implements IDatabase<T> {
     }
 
     /**
-     * @param json
-     * @return
+     * Converte uma string JSON em um objeto Java do tipo especificado.
+     *
+     * @param json   string JSON a ser convertida
+     * @param classe tipo da entidade de destino
+     * @return objeto desserializado, ou {@code null} em caso de erro
      */
     public T converterJsonParaJava(String json, Class<T> classe) {
         try {
@@ -135,6 +160,12 @@ public class Database<T> implements IDatabase<T> {
         }
     }
 
+    /**
+     * Retorna o nome do arquivo JSON correspondente ao nome da entidade informada.
+     *
+     * @param nomeEntidade nome simples da entidade
+     * @return nome do arquivo JSON, ou string vazia se não encontrado
+     */
     private String getNomeBanco(String nomeEntidade) {
         switch (nomeEntidade.toLowerCase()) {
             case "usuario":
@@ -152,6 +183,12 @@ public class Database<T> implements IDatabase<T> {
         }
     }
 
+    /**
+     * Formata o caminho absoluto do arquivo JSON correspondente à classe informada.
+     *
+     * @param classe tipo da entidade cujo arquivo será localizado
+     * @return {@link Path} do arquivo JSON, ou {@code null} se a entidade não for reconhecida
+     */
     private Path getPathBanco(Class<?> classe) {
         String nomeBanco = getNomeBanco(classe.getSimpleName());
         if (nomeBanco.isEmpty())

@@ -75,7 +75,7 @@ public class Agricultor extends Usuario implements IAgricultor {
         return enderecoId;
     }
 
-    public void setEnderecoId(String enderecoId) {
+    private void setEnderecoId(String enderecoId) {
         this.enderecoId = enderecoId;
     }
 
@@ -83,7 +83,7 @@ public class Agricultor extends Usuario implements IAgricultor {
         return agricultorId;
     }
 
-    public void setAgricultorId(String agricultorId) {
+    private void setAgricultorId(String agricultorId) {
         this.agricultorId = agricultorId;
     }
 
@@ -91,7 +91,7 @@ public class Agricultor extends Usuario implements IAgricultor {
         return idade;
     }
 
-    public void setIdade(int idade) {
+    private void setIdade(int idade) {
         this.idade = idade;
     }
 

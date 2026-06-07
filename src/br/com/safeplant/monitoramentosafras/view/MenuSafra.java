@@ -64,7 +64,12 @@ public class MenuSafra {
     }
 
     public void menuNovaSafra() {
+        boolean safraValida = false;
+        do {
 
+
+
+        } while (!safraValida);
     }
 
     public void menuEditarSafra() {

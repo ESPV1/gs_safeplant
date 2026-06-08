@@ -85,20 +85,20 @@
     "ultimoAcessoEm": "2026-06-06T01:34:01.421612200"
   },
   {
-    "agricultorId": "99b9f613-0f5a-479d-9e67-dba78b3d018d",
-    "enderecoId": "cf220c71-9e81-4fab-a4c9-4d22c3c814c5",
-    "dataDeNascimento": "12/10/2000",
-    "idade": 25,
+    "agricultorId": "bc7ab750-d4f6-43b5-a001-ccec3770f1b2",
+    "enderecoId": "05f5b453-9a84-4152-b3c8-698f57311c04",
+    "dataDeNascimento": "21/11/2006",
+    "idade": 19,
     "celular": "11987654321",
-    "cpf": "12309845612",
-    "usuarioId": "b42e94cb-bce6-453b-9cba-70dd4a576f60",
-    "nomeCompleto": "Pedro Lucas",
-    "nomeUsuario": "pedro.lucas",
+    "cpf": "66234431429",
+    "usuarioId": "c1474dfd-1c14-4a37-b69f-a3d70bd9ae39",
+    "nomeCompleto": "Pedro Lucas Almeida",
+    "nomeUsuario": "pedro",
     "primeiroNome": "Pedro",
-    "sobrenome": "Lucas",
+    "sobrenome": "Lucas Almeida",
     "email": "pedro@teste.com",
-    "senha": "pedro@123",
+    "senha": "Pedro@1234",
     "ativo": true,
-    "ultimoAcessoEm": "2026-06-06T01:41:38.442393600"
+    "ultimoAcessoEm": "2026-06-08T16:51:46.265888400"
   }
 ]

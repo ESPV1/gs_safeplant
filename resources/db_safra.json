@@ -7,27 +7,19 @@
     "status": "EM_ANDAMENTO",
     "cultivados": [
       {
-        "produtoId": "fe503212-185a-4609-8f8d-c3ed0598c3be",
-        "nome": "Laranja",
-        "tipoProduto": "FRUTA",
-        "nomeCientifico": "Citrus sinensis",
-        "tempoColheitaEmDias": 30,
-        "agricultorId": "49f80cd1-dfe4-4c8a-aaa3-db343ef0d434"
-      },
-      {
-        "produtoId": "cd4971d4-d07f-479b-966d-849f8567a059",
-        "nome": "Batata Inglesa",
-        "tipoProduto": "CEREAL",
-        "nomeCientifico": "Solanum tuberosum.",
-        "tempoColheitaEmDias": 60,
-        "agricultorId": "49f80cd1-dfe4-4c8a-aaa3-db343ef0d434"
-      },
-      {
         "produtoId": "64dc0f9f-2d89-4dbc-a47b-065c0fcf4933",
         "nome": "Uva",
         "tipoProduto": "FRUTA",
         "nomeCientifico": "Vitis vinifera",
         "tempoColheitaEmDias": 20,
+        "agricultorId": "49f80cd1-dfe4-4c8a-aaa3-db343ef0d434"
+      },
+      {
+        "produtoId": "fe503212-185a-4609-8f8d-c3ed0598c3be",
+        "nome": "Laranja",
+        "tipoProduto": "FRUTA",
+        "nomeCientifico": "Citrus sinensis",
+        "tempoColheitaEmDias": 30,
         "agricultorId": "49f80cd1-dfe4-4c8a-aaa3-db343ef0d434"
       }
     ],

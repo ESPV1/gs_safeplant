@@ -199,7 +199,7 @@ public class Agricultor extends Usuario implements IAgricultor {
         if (!Verificador.verificarData(dataNascimento))
             return 0;
 
-        LocalDate nascimento = LocalDate.parse(Interacao.formataData(dataNascimento));
+        LocalDate nascimento = Interacao.formataDataLocalDate(dataNascimento);
         LocalDate hoje = LocalDate.now();
 
         int idade = hoje.getYear() - nascimento.getYear();

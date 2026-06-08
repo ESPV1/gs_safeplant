@@ -296,16 +296,31 @@ public class MenuSafra {
      * @param safra instância de {@link Safra} a ter os cultivos atualizados
      */
     public void atualizarCultivados(Safra safra) {
-        ArrayList<Produto> cultivados = safra.getCultivados();
-        if (cultivados.isEmpty()) {
-            System.out.println("\033[1;31mNenhum produto cultivado. Safra inválida.\033[m");
+        int tamanhoOriginal = safra.getCultivados().size();
+        ArrayList<Produto> cultivados = new ArrayList<>(safra.getCultivados());
+        ArrayList<Produto> novoCultivo = selecionarCultivados(cultivados);
+
+        if (novoCultivo == null) {
+            System.out.println("\033[1mNenhuma Alteração foi realizada.\033[m");
             return;
         }
-        safra.setCultivados(selecionarCultivados(cultivados));
+        if (novoCultivo.isEmpty()) {
+            System.out.println("\033[1;93mSafra deve conter ao menos 1 cultivo. Operação Cancelada.\033[m");
+            return;
+        }
+
+        safra.setCultivados(novoCultivo);
         boolean sucesso = safra.editar();
-        if (sucesso) System.out.println("\033[1;92mNovos cultivos foram adicionados a Safra\033[m");
 
+        if (!sucesso)
+            return;
 
+        if (novoCultivo.size() > tamanhoOriginal)
+            System.out.println("\033[1;92mNovos cultivos foram adicionados a Safra\033[m");
+        else if (novoCultivo.size() < tamanhoOriginal)
+            System.out.println("\033[1;31mCultivos foram removidos da Safra\033[m");
+        else
+            System.out.println("\033[1;92mCultivos da Safra foram atualizados\033[m");
     }
 
     /**
@@ -317,7 +332,7 @@ public class MenuSafra {
     public ArrayList<Produto> selecionarCultivados() {
         MenuProduto menuProduto = new MenuProduto(getAgricultor());
         ArrayList<Produto> cultivados = new ArrayList<Produto>();
-        return definirCultivos(cultivados, menuProduto);
+        return definirCultivos(cultivados, menuProduto, true);
     }
 
     /**
@@ -329,12 +344,42 @@ public class MenuSafra {
      */
     public ArrayList<Produto> selecionarCultivados(ArrayList<Produto> jaCultivados) {
         MenuProduto menuProduto = new MenuProduto(getAgricultor());
+        ArrayList<Produto> listaFinal = new ArrayList<Produto>();
+
         if (jaCultivados.isEmpty()) {
-            return new ArrayList<>();
+            return definirCultivos(jaCultivados, menuProduto, true);
         }
-        System.out.println("\033[1;36m=====| ATUALMENTE CULTIVADOS |=====\033[m");
-        jaCultivados.forEach(c -> System.out.println(c.getNomeFormatado()));
-        return definirCultivos(jaCultivados, menuProduto);
+
+        String opcaoEscolhida = "";
+        do {
+            System.out.println("\033[1;36m=====| ATUALMENTE CULTIVADOS |=====\033[m");
+            jaCultivados.forEach(c -> System.out.println(c.getNomeFormatado()));
+            System.out.println("\n\033[1;94m=====| OPERAÇÃO |=====\033[m");
+            System.out.println("\033[1;36m[1]\033[m Adicionar Cultivo");
+            System.out.println("\033[1;36m[2]\033[m Remover Cultivo ");
+            System.out.println("\033[1;36m[3]\033[m Voltar e salvar ");
+            System.out.println("\033[1;36m[4]\033[m Voltar sem salvar ");
+            opcaoEscolhida = Interacao.inputString("Escolha: ");
+
+            switch (opcaoEscolhida) {
+                case "1":
+                    listaFinal = definirCultivos(jaCultivados, menuProduto, true);
+                    break;
+                case "2":
+                    listaFinal = definirCultivos(jaCultivados, menuProduto, false);
+                    break;
+                case "3":
+                    break;
+                case "4":
+                    listaFinal = null;
+                    break;
+                default:
+                    System.out.println("\033[1;31mOpção inválida\033[m");
+                    break;
+            }
+        } while (!(opcaoEscolhida.equals("3") || opcaoEscolhida.equals("4")));
+
+        return listaFinal;
     }
 
     /**
@@ -345,15 +390,16 @@ public class MenuSafra {
      * @param menu       instância de {@link MenuProduto} utilizada para exibição formatada
      * @return {@link ArrayList} de {@link Produto} com todos os cultivos definidos
      */
-    private ArrayList<Produto> definirCultivos(ArrayList<Produto> cultivados, MenuProduto menu) {
+    private ArrayList<Produto> definirCultivos(ArrayList<Produto> cultivados, MenuProduto menu, boolean adicionando) {
         boolean finalizarCultivados = false;
         do {
+            System.out.println("\033[1;93mDigite 0 para encerrar e retornar\033[m");
             System.out.printf("\033[1;32m=====| ESTOQUE DISPONÍVEL DE %s |=====\033[m\n", getAgricultor().getPrimeiroNome().toUpperCase());
-            ArrayList<Produto> produtos = new Produto().pegarMeusProdutos(getAgricultor().getAgricultorId(), cultivados);
+            ArrayList<Produto> produtos = adicionando ? new Produto().pegarMeusProdutos(getAgricultor().getAgricultorId(), cultivados) : cultivados;
 
             if (produtos.isEmpty()) {
-                System.out.println("Estoque Vazio.");
-                return null;
+                System.out.println("\n\033[1;31mEstoque dísponível está vazio.\033[m");
+                return new ArrayList<Produto>();
             }
 
             System.out.println("\033[1;96m=====| SUMÁRIO |=====\033[m");
@@ -376,8 +422,14 @@ public class MenuSafra {
                 continue;
             }
             Produto cultivo = produtos.get(idx-1);
-            System.out.printf("\033[1;92m\n%s %s adicionado(a)!\n\033[m", cultivo.getTipoProduto().getDescricao().toUpperCase(), cultivo.getNome().toUpperCase());
-            cultivados.add(cultivo);
+            if (adicionando) {
+                System.out.printf("\033[1;92m\n%s %s adicionado(a)!\n\033[m", cultivo.getTipoProduto().getDescricao().toUpperCase(), cultivo.getNome().toUpperCase());
+                cultivados.add(cultivo);
+            }
+            else {
+                System.out.printf("\033[1;31m\n%s %s removido!\n\033[m", cultivo.getTipoProduto().getDescricao().toUpperCase(), cultivo.getNome().toUpperCase());
+                cultivados.remove(cultivo);
+            }
 
             finalizarCultivados = Interacao.inputBooleano("Encerrar registro de cultivos do estoque? [s/n]: ");
         } while (!finalizarCultivados);

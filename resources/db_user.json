@@ -55,14 +55,14 @@
     "ultimoAcessoEm": "2026-06-06T01:34:01.421612200"
   },
   {
-    "usuarioId": "b42e94cb-bce6-453b-9cba-70dd4a576f60",
-    "nomeCompleto": "Pedro Lucas",
-    "nomeUsuario": "pedro.lucas",
+    "usuarioId": "c1474dfd-1c14-4a37-b69f-a3d70bd9ae39",
+    "nomeCompleto": "Pedro Lucas Almeida",
+    "nomeUsuario": "pedro",
     "primeiroNome": "Pedro",
-    "sobrenome": "Lucas",
+    "sobrenome": "Lucas Almeida",
     "email": "pedro@teste.com",
-    "senha": "pedro@123",
+    "senha": "Pedro@1234",
     "ativo": true,
-    "ultimoAcessoEm": "2026-06-06T01:41:38.442393600"
+    "ultimoAcessoEm": "2026-06-08T16:51:46.265888400"
   }
 ]

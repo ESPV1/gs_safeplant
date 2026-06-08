@@ -11,14 +11,14 @@
     "complemento": ""
   },
   {
-    "enderecoId": "cf220c71-9e81-4fab-a4c9-4d22c3c814c5",
-    "cep": "04224-050",
-    "logradouro": "Rua Teste",
-    "numero": "11",
-    "bairro": "Bairro Teste",
-    "localidade": "Cidade Teste",
-    "regiao": "Teste",
-    "uf": "TE",
+    "enderecoId": "05f5b453-9a84-4152-b3c8-698f57311c04",
+    "cep": "04094-050",
+    "logradouro": "Avenida Pedro Álvares Cabral",
+    "numero": "22",
+    "bairro": "Parque Ibirapuera",
+    "localidade": "São Paulo",
+    "regiao": "Sudeste",
+    "uf": "SP",
     "complemento": ""
   }
 ]

@@ -121,6 +121,27 @@ public class Interacao {
             return "";
         }
     }
+    /**
+     * Converte uma data em {@link String} para o formato DD/MM/YYYY,
+     * aceitando tanto o padrão ISO (yyyy-MM-dd) quanto o padrão brasileiro (DD/MM/YYYY).
+     * Retorna uma {@link String} vazia caso a data seja inválida.
+     *
+     * @param data {@link String} contendo a data a ser formatada
+     * @return {@link String} data formatada no padrão DD/MM/YYYY, ou vazia se inválida
+     */
+    public static LocalDate formataDataLocalDate(String data) {
+        try {
+            if (data.contains("-")) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                return LocalDate.parse(data, formatter);
+            }
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            return LocalDate.parse(data, formatter);
+        }
+        catch (DateTimeParseException ex) {
+            return LocalDate.now();
+        }
+    }
 
     /**
      * Aguarda o usuário pressionar qualquer tecla antes de prosseguir,

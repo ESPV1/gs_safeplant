@@ -1,5 +1,6 @@
 package br.com.safeplant.monitoramentosafras.models;
 
+import br.com.safeplant.monitoramentosafras.helper.Interacao;
 import br.com.safeplant.monitoramentosafras.helper.Verificador;
 import br.com.safeplant.monitoramentosafras.interfaces.IAgricultor;
 import br.com.safeplant.monitoramentosafras.interfaces.IDatabase;
@@ -75,7 +76,7 @@ public class Agricultor extends Usuario implements IAgricultor {
         return enderecoId;
     }
 
-    private void setEnderecoId(String enderecoId) {
+    public void setEnderecoId(String enderecoId) {
         this.enderecoId = enderecoId;
     }
 
@@ -98,11 +99,10 @@ public class Agricultor extends Usuario implements IAgricultor {
     public int calcularIdade() {
         String dataNascimento = getDataDeNascimento();
 
-        if (!Verificador.verificarDataNascimento(dataNascimento))
+        if (!Verificador.verificarData(dataNascimento))
             return 0;
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate nascimento = LocalDate.parse(dataNascimento, formatter);
+        LocalDate nascimento = LocalDate.parse(Interacao.formataData(dataNascimento));
         LocalDate hoje = LocalDate.now();
 
         int idade = hoje.getYear() - nascimento.getYear();
@@ -132,7 +132,7 @@ public class Agricultor extends Usuario implements IAgricultor {
         }
     }
 
-    public ArrayList<String> verificarAgro() {
+    public ArrayList<String> verificarRegistro() {
         ArrayList<String> erros = new ArrayList<String>();
 
         if (!Verificador.verificarCPF(getCpf()))
@@ -144,7 +144,7 @@ public class Agricultor extends Usuario implements IAgricultor {
         if (getCelular().charAt(2) != '9')
             erros.add("Celular deve começar com 9");
 
-        if (Verificador.verificarDataNascimento(getDataDeNascimento())) {
+        if (Verificador.verificarData(getDataDeNascimento())) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate cast = LocalDate.parse(getDataDeNascimento(), formatter);
 
@@ -156,6 +156,13 @@ public class Agricultor extends Usuario implements IAgricultor {
             erros.add("Formatação de data de nascimento inválida: DD/MM/YYYY");
 
         return erros;
+    }
+
+    /**
+     * @return
+     */
+    public String getId() {
+        return getAgricultorId();
     }
 
     public void exibirMeuPerfil() {
@@ -170,11 +177,14 @@ public class Agricultor extends Usuario implements IAgricultor {
 
         System.out.println("\033[1;32m\n\n=====| CREDENCIAIS DE ACESSO |=====\033[m");
         System.out.printf("Email: %s\n", getEmail());
-        System.out.printf("Senha: %s", getSenha());
+        System.out.printf("Senha: %s\n", getSenha().substring(0, 2) + "**" + getSenha().substring(getSenha().length()-2));
 
+        System.out.println("\033[1;32m\n=====| ENDEREÇO DO AGRICULTOR |=====\033[m");
         Endereco meuEndereco = Endereco.BuscarPorId(getEnderecoId());
-        if (meuEndereco == null) return;
-        System.out.println("\033[1;32m\n\n=====| ENDEREÇO REGISTRADO |=====\033[m");
+        if (meuEndereco == null) {
+            System.out.println("Agricultor sem endereço cadastrado!");
+            return;
+        }
         meuEndereco.exibirInfosCep(true);
         System.out.printf("Complemento: %s\n", meuEndereco.getComplemento());
         System.out.printf("Número: %s\n", meuEndereco.getNumero());

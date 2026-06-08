@@ -1,5 +1,8 @@
 package br.com.safeplant.monitoramentosafras.helper;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class Interacao {
@@ -29,7 +32,50 @@ public class Interacao {
         return valor.equalsIgnoreCase("s");
     }
 
+    public static String inputData(String label) {
+        System.out.print(label);
+        String valor = scanner.nextLine().trim();
+        if (valor.equalsIgnoreCase("hoje")) return formataData(LocalDate.now().toString());
+        if (!Verificador.verificarData(valor)) return null;
+        return formataData(valor);
+    }
+
+    public static double inputDouble(String label) {
+        System.out.print(label);
+        String valor = scanner.nextLine().trim();
+
+        if (verificarSaida(valor)) return Double.NEGATIVE_INFINITY;
+        if (!Verificador.verificarDouble(valor)) return Double.NaN;
+
+        return Double.parseDouble(valor);
+    }
+
+
     public static boolean verificarSaida(String input) {
         return input.equalsIgnoreCase("Sair");
+    }
+
+    public static String formataData(String data) {
+        try {
+            if (data.contains("-")) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                return LocalDate.parse(data).format(formatter);
+            }
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            return LocalDate.parse(data, formatter).format(formatter);
+        }
+        catch (DateTimeParseException ex) {
+            return "";
+        }
+    }
+
+    public static void aguardarTecla(Scanner scanner) {
+        System.out.println("Pressione qualquer tecla para fechar o menu...");
+        try {
+            System.in.read();
+            System.in.skip(System.in.available());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

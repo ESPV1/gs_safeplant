@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class Endereco implements IOperacoesPadrao {
-    private String id;
+    private String enderecoId;
     private String cep;
     private String logradouro;
     private String numero;
@@ -21,14 +21,14 @@ public class Endereco implements IOperacoesPadrao {
     private String regiao;
     private String uf;
     private String complemento;
-    private static transient final IDatabase<Endereco> database = new Database<>();;
+    private static final IDatabase<Endereco> database = new Database<>();;
 
     public Endereco() {
-        this.id = UUID.randomUUID().toString();
+        this.enderecoId = UUID.randomUUID().toString();
     }
 
     public Endereco(String cep, String logradouro, String numero, String bairro, String localidade, String uf, String complemento, String regiao) {
-        this.id = UUID.randomUUID().toString();
+        this.enderecoId = UUID.randomUUID().toString();
         this.cep = cep;
         this.logradouro = logradouro;
         this.numero = numero;
@@ -39,12 +39,12 @@ public class Endereco implements IOperacoesPadrao {
         this.regiao = regiao;
     }
 
-    public String getId() {
-        return id;
+    public String getEnderecoId() {
+        return enderecoId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    private void setEnderecoId(String enderecoId) {
+        this.enderecoId = enderecoId;
     }
 
     public String getCep() {
@@ -136,7 +136,7 @@ public class Endereco implements IOperacoesPadrao {
         try {
             ArrayList<Endereco> enderecos = database.lerRegistro(Endereco.class);
             for (Endereco end : enderecos) {
-                if (end.getId().equalsIgnoreCase(enderecoId))
+                if (end.getEnderecoId().equalsIgnoreCase(enderecoId))
                     return end;
             }
             return null;
@@ -148,7 +148,7 @@ public class Endereco implements IOperacoesPadrao {
 
     }
 
-    public ArrayList<String> verificarEndereco() {
+    public ArrayList<String> verificarRegistro() {
         ArrayList<String> erros = new ArrayList<String>();
 
         if (!Verificador.verificarCEP(getCep()))
@@ -165,6 +165,13 @@ public class Endereco implements IOperacoesPadrao {
             erros.add("Número da casa não deve conter letras");
 
         return erros;
+    }
+
+    /**
+     * @return
+     */
+    public String getId() {
+        return getEnderecoId();
     }
 
     /**

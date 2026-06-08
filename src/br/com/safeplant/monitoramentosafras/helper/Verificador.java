@@ -6,24 +6,17 @@ import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 
 public class Verificador {
-    public static boolean verificarDataNascimento(String dataNascimento) {
-        try {
-            if (dataNascimento.split("/").length != 3)
-                return false;
-            String validDate = LocalDate.parse(dataNascimento, DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString();
+    public static boolean verificarData(String data) {
+        if (data == null || data.isEmpty())
+            return false;
 
-            return !validDate.isEmpty();
-        }
-        catch (DateTimeParseException ex) {
-            return false;
-        }
-        catch (Exception ex) {
-            ex.printStackTrace();
-            return false;
-        }
+        return !Interacao.formataData(data).isEmpty();
     }
 
     public static boolean verificarCPF(String cpf) {
+        if (cpf.isEmpty())
+            return false;
+
         String[] invalidCPFs = {
                 "11111111111", "22222222222", "33333333333",
                 "44444444444", "55555555555", "66666666666",
@@ -46,8 +39,28 @@ public class Verificador {
         return Integer.parseInt(valor);
     }
 
+    public static boolean verificarDouble(String valor) {
+        valor = valor.trim();
+        if (valor == null || valor.isEmpty())
+            return false;
+        try {
+            Double.parseDouble(valor);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
     public static boolean verificarCEP(String cep) {
         cep = cep.replaceAll("[^\\d]", "");
         return cep.length() == 8;
+    }
+
+    public static boolean verificarLatitude(double latitude) {
+        return !(latitude < -90.0) && !(latitude > 90.0);
+    }
+
+    public static boolean verificarLongitude(double longitude) {
+        return !(longitude < -180.0) && !(longitude > 180.0);
     }
 }

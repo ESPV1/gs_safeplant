@@ -5,22 +5,22 @@ import br.com.safeplant.monitoramentosafras.interfaces.ILocalizacao;
 import java.util.UUID;
 
 public class Localizacao implements ILocalizacao {
-    private String id;
+    private transient String localizaId;
     private double latitude;
     private double longitude;
 
     public Localizacao(double latitude, double longitude) {
-        this.id = UUID.randomUUID().toString();
+        this.localizaId = UUID.randomUUID().toString();
         this.latitude = latitude;
         this.longitude = longitude;
     }
 
-    public String getId() {
-        return id;
+    public String getTerrenoId() {
+        return localizaId;
     }
 
-    private void setId(String id) {
-        this.id = id;
+    private void setLocalizaId(String localizaId) {
+        this.localizaId = localizaId;
     }
 
     public double getLatitude() {

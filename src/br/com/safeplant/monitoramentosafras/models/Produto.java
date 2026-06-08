@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class Produto implements IProduto {
-    private String id;
+    private String produtoId;
     private String nome;
     private TipoProduto tipoProduto;
     private String nomeCientifico;
@@ -21,7 +21,7 @@ public class Produto implements IProduto {
     }
 
     public Produto(String nome, String nomeCientifico, int tempoColheitaEmDias, TipoProduto tipoProduto, String agricultorId) {
-        this.id = UUID.randomUUID().toString();
+        this.produtoId = UUID.randomUUID().toString();
         this.nome = nome;
         this.nomeCientifico = nomeCientifico;
         this.tempoColheitaEmDias = tempoColheitaEmDias;
@@ -30,16 +30,30 @@ public class Produto implements IProduto {
         this.database = new Database<Produto>();
     }
 
-    public String getId() {
-        return id;
+    public String getProdutoId() {
+        return produtoId;
     }
 
-    private void setId(String id) {
-        id = id;
+    private void setProdutoId(String produtoId) {
+        this.produtoId = produtoId;
     }
 
     public String getNome() {
-        return nome;
+        return this.nome;
+    }
+
+    public String getNomeFormatado() {
+        if (this.tipoProduto == null)
+            return this.nome;
+
+        switch (this.tipoProduto) {
+            case LEGUME:  return "\033[1;35m" + this.nome + "\033[m";
+            case VEGETAL: return "\033[1;92m" + this.nome + "\033[m";
+            case FRUTA:   return "\033[1;33m" + this.nome + "\033[m";
+            case CEREAL:  return "\033[1;93m" + this.nome + "\033[m";
+            case LACTINIO: return "\033[1;34m" + this.nome + "\033[m";
+            default: return this.nome;
+        }
     }
 
     public void setNome(String nome) {
@@ -107,7 +121,7 @@ public class Produto implements IProduto {
         }
     }
 
-    public ArrayList<String> verificarRegistroProduto() {
+    public ArrayList<String> verificarRegistro() {
         ArrayList<String> erros = new ArrayList<String>();
 
         if (getNome().length() < 3)
@@ -152,5 +166,30 @@ public class Produto implements IProduto {
                 meusProdutos.add(prod);
         }
         return meusProdutos;
+    }
+    public ArrayList<Produto> pegarMeusProdutos(String agricultorId, ArrayList<Produto> filtros) {
+        ArrayList<Produto> produtos = exibirProdutos();
+        if (produtos.isEmpty())
+            return new ArrayList<Produto>();
+
+        ArrayList<Produto> meusProdutos = new ArrayList<Produto>();
+        for (Produto prod : produtos) {
+            if (prod.getAgricultorId().equals(agricultorId) && (filtros.isEmpty() || !Produto.existeProduto(filtros, prod))) {
+                meusProdutos.add(prod);
+            }
+        }
+        return meusProdutos;
+    }
+
+    private static boolean existeProduto(ArrayList<Produto> produtos, Produto prodAEncontrar) {
+        for (Produto prodF : produtos) {
+            if (prodAEncontrar.getProdutoId().equalsIgnoreCase(prodF.getProdutoId()))
+                return true;
+        }
+        return false;
+    }
+
+    public String getId() {
+        return getProdutoId();
     }
 }

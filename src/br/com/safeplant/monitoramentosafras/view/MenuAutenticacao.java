@@ -65,7 +65,7 @@ public class MenuAutenticacao {
             System.out.println("Ocorreu um erro ao cadastraro endereço do Agricultor");
             return;
         }
-        novoAgro.setEnderecoId(novoEndereco.getId());
+        novoAgro.setEnderecoId(novoEndereco.getEnderecoId());
         boolean agricultorValido = novoAgro.adicionar();
 
         if (usuarioValido && agricultorValido) {
@@ -107,7 +107,7 @@ public class MenuAutenticacao {
             if (Interacao.verificarSaida(senha)) return null;
 
             novoUsuario = new Usuario(nomeCompleto, nomeUsuario, email, senha);
-            ArrayList<String> validacaoMensagem = novoUsuario.verificarUsuario();
+            ArrayList<String> validacaoMensagem = novoUsuario.verificarRegistro();
 
             if (!validacaoMensagem.isEmpty()) {
                 System.out.println("\n\033[1;31mErros encontrados: \033[m");
@@ -133,14 +133,14 @@ public class MenuAutenticacao {
             String cpf = Interacao.inputString("CPF: ");
             if (Interacao.verificarSaida(cpf)) return null;
 
-            String dataNascimento = Interacao.inputString("Data de Nascimento: ");
-            if (Interacao.verificarSaida(dataNascimento)) return null;
+            String dataNascimento = Interacao.inputData("Data de Nascimento: ");
+            if (dataNascimento != null && Interacao.verificarSaida(dataNascimento)) return null;
 
             String celular = Interacao.inputString("Celular: ");
             if (Interacao.verificarSaida(celular)) return null;
 
             novoAgro = new Agricultor(novoUsuario, cpf, "end-004", dataNascimento, celular);
-            ArrayList<String> validacaoMensagem = novoAgro.verificarAgro();
+            ArrayList<String> validacaoMensagem = novoAgro.verificarRegistro();
 
             if (!validacaoMensagem.isEmpty()) {
                 System.out.println("\n\033[1;31mErros encontrados: \033[m");
@@ -191,7 +191,7 @@ public class MenuAutenticacao {
             }
             if (!buscaPorCep) continue;
 
-            ArrayList<String> erros = novoEndereco.verificarEndereco();
+            ArrayList<String> erros = novoEndereco.verificarRegistro();
             if (!erros.isEmpty()) {
                 System.out.println("\n\033[1;31mErros encontrados: \033[m");
                 erros.forEach(msg -> System.out.println(msg));

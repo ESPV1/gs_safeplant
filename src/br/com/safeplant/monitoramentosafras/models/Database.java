@@ -1,6 +1,7 @@
 package br.com.safeplant.monitoramentosafras.models;
 
 import br.com.safeplant.monitoramentosafras.interfaces.IDatabase;
+import br.com.safeplant.monitoramentosafras.interfaces.IOperacoesPadrao;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
  *
  * @param <T> tipo da entidade gerenciada pelo banco de dados
  */
-public class Database<T> implements IDatabase<T> {
+public class Database<T extends IOperacoesPadrao> implements IDatabase<T> {
     /**
      * Instância do Gson utilizada para serialização e desserialização de objetos Java para JSON.
      */
@@ -98,8 +99,19 @@ public class Database<T> implements IDatabase<T> {
             if (registros == null)
                 return false;
 
-            int indexEndereco = registros.indexOf(entidade);
-            registros.add(indexEndereco, entidade);
+            int indexEndereco = -1;
+            for (int i = 0; i < registros.size(); i++) {
+                T e = registros.get(i);
+                if (e.getId().equals(entidade.getId())) {
+                    indexEndereco = i;
+                    break;
+                }
+            }
+
+            if (indexEndereco < 0)
+                return false;
+
+            registros.set(indexEndereco, entidade);
 
             Files.writeString(path, gson.toJson(registros), StandardCharsets.UTF_8);
 
@@ -127,9 +139,20 @@ public class Database<T> implements IDatabase<T> {
 
             ArrayList<T> registros = lerRegistro(classe);
             if (registros == null)
-                registros = new ArrayList<>();
+                return false;
 
-            registros.remove(entidade);
+            int indexEndereco = -1;
+            for (int i = 0; i < registros.size(); i++) {
+                T e = registros.get(i);
+                if (e.getId().equals(entidade.getId())) {
+                    indexEndereco = i;
+                    break;
+                }
+            }
+            if (indexEndereco < 0)
+                return false;
+
+            registros.remove(indexEndereco);
 
             Files.writeString(path, gson.toJson(registros), StandardCharsets.UTF_8);
 

@@ -152,7 +152,7 @@ public class Usuario implements IUsuario {
         return false;
     }
 
-    public ArrayList<String> verificarUsuario() {
+    public ArrayList<String> verificarRegistro() {
         ArrayList<String> erros = new ArrayList<String>();
 
         if (getSenha().length() <= 3)
@@ -181,6 +181,13 @@ public class Usuario implements IUsuario {
             erros.add("Nome de usuário não deve começar com números");
 
         return erros;
+    }
+
+    /**
+     * @return
+     */
+    public String getId() {
+        return getUsuarioId();
     }
 
     public boolean adicionar() {

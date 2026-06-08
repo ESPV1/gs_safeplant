@@ -67,7 +67,7 @@ public class MenuProduto {
         System.out.println("Meus produtos cultivados");
     }
 
-    public void menuExibirEstoque() {
+    private void menuExibirEstoque() {
         System.out.printf("\033[1;32m=====| ESTOQUE DE %s |=====\033[m]\n", agricultor.getPrimeiroNome().toUpperCase());
         ArrayList<Produto> produtos = new Produto().pegarMeusProdutos(this.agricultor.getAgricultorId());
 
@@ -86,8 +86,7 @@ public class MenuProduto {
         for (Produto prod : produtos) {
             mostrarProdutoPorCor(prod.getNome(), prod.getNomeCientifico(), prod.getTipoProduto());
         }
-        System.out.println("Pressione qualquer tecla para encerrar...");
-        String tmp = scanner.nextLine();
+        Interacao.aguardarTecla(scanner);
     }
 
     public void menuRegistrarNovoProduto() {
@@ -111,7 +110,7 @@ public class MenuProduto {
             if (diasColheita == -1) return;
 
             novoProduto = new Produto(nome, nomeCientifico, diasColheita, tipoProduto, agricultor.getAgricultorId());
-            ArrayList<String> erros = novoProduto.verificarRegistroProduto();
+            ArrayList<String> erros = novoProduto.verificarRegistro();
 
             if (!erros.isEmpty()) {
                 System.out.println("\n\033[1;31mErros encontrados: \033[m");
@@ -184,5 +183,31 @@ public class MenuProduto {
                 break;
         }
         System.out.printf(textoFinal, nome, nomeCientifico);
+    }
+    public void mostrarProdutoPorCor(String nome, String nomeCientifico, TipoProduto tipoProduto, int index) {
+        String textoBase = "\033[1;36m[%d]\033[m \033[1;corm%s (%s)\033[m\n";
+
+        String textoFinal;
+        switch (tipoProduto.getDescricao().toLowerCase()) {
+            case "legume":
+                textoFinal = textoBase.replace("cor", "35"); // roxo
+                break;
+            case "vegetal":
+                textoFinal = textoBase.replace("cor", "92"); // verde claro
+                break;
+            case "fruta":
+                textoFinal = textoBase.replace("cor", "33"); // laranja
+                break;
+            case "cereal":
+                textoFinal = textoBase.replace("cor", "93"); // amarelo
+                break;
+            case "lactinio":
+                textoFinal = textoBase.replace("cor", "34"); // azul
+                break;
+            default:
+                textoFinal = textoBase.replace("cor", "36"); // ciano
+                break;
+        }
+        System.out.printf(textoFinal, index, nome, nomeCientifico);
     }
 }

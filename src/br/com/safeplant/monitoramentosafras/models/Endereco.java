@@ -11,6 +11,10 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.UUID;
 
+/**
+ * Representa o endereço de um agricultor, com suporte a busca
+ * automática de dados via API ViaCEP.
+ */
 public class Endereco implements IOperacoesPadrao {
     private String enderecoId;
     private String cep;
@@ -23,10 +27,26 @@ public class Endereco implements IOperacoesPadrao {
     private String complemento;
     private static final IDatabase<Endereco> database = new Database<>();;
 
+    /**
+     * Construtor padrão. Gera automaticamente um identificador único para o endereço.
+     */
     public Endereco() {
         this.enderecoId = UUID.randomUUID().toString();
     }
 
+    /**
+     * Cria um endereço com todos os campos preenchidos.
+     * O identificador único é gerado automaticamente.
+     *
+     * @param cep        CEP do endereço
+     * @param logradouro nome do logradouro
+     * @param numero     número da residência
+     * @param bairro     nome do bairro
+     * @param localidade nome da cidade
+     * @param uf         sigla do estado (2 caracteres)
+     * @param complemento complemento do endereço
+     * @param regiao     região do país
+     */
     public Endereco(String cep, String logradouro, String numero, String bairro, String localidade, String uf, String complemento, String regiao) {
         this.enderecoId = UUID.randomUUID().toString();
         this.cep = cep;
@@ -39,79 +59,158 @@ public class Endereco implements IOperacoesPadrao {
         this.regiao = regiao;
     }
 
+    /**
+     * Retorna o identificador único do endereço.
+     * @return {@link String} ID do endereço
+     */
     public String getEnderecoId() {
         return enderecoId;
     }
 
+    /**
+     * Define o identificador único do endereço.
+     * @param enderecoId {@link String} ID do endereço
+     */
     private void setEnderecoId(String enderecoId) {
         this.enderecoId = enderecoId;
     }
 
+    /**
+     * Retorna o CEP do endereço.
+     * @return {@link String} CEP do endereço
+     */
     public String getCep() {
         return cep;
     }
 
+    /**
+     * Define o CEP do endereço.
+     * @param cep {@link String} CEP do endereço
+     */
     public void setCep(String cep) {
         this.cep = cep;
     }
 
+    /**
+     * Retorna o logradouro do endereço.
+     * @return {@link String} Logradouro do endereço
+     */
     public String getLogradouro() {
         return logradouro;
     }
 
+    /**
+     * Define o logradouro do endereço.
+     * @param logradouro {@link String} Logradouro do endereço
+     */
     public void setLogradouro(String logradouro) {
         this.logradouro = logradouro;
     }
 
+    /**
+     * Retorna o número do endereço.
+     * @return {@link String} Número do endereço
+     */
     public String getNumero() {
         return numero;
     }
 
+    /**
+     * Define o número do endereço.
+     * @param numero {@link String} Número do endereço
+     */
     public void setNumero(String numero) {
         this.numero = numero;
     }
 
+    /**
+     * Retorna o bairro do endereço.
+     * @return {@link String} Bairro do endereço
+     */
     public String getBairro() {
         return bairro;
     }
 
+    /**
+     * Define o bairro do endereço.
+     * @param bairro {@link String} Bairro do endereço
+     */
     public void setBairro(String bairro) {
         this.bairro = bairro;
     }
 
+    /**
+     * Retorna a sigla do estado do endereço.
+     * @return {@link String} UF do endereço
+     */
     public String getUf() {
         return uf;
     }
 
+    /**
+     * Define a sigla do estado do endereço.
+     * @param uf {@link String} UF do endereço
+     */
     public void setUf(String uf) {
         this.uf = uf;
     }
 
+    /**
+     * Retorna o complemento do endereço.
+     * @return {@link String} Complemento do endereço
+     */
     public String getComplemento() {
         return complemento;
     }
 
+    /**
+     * Define o complemento do endereço.
+     * @param complemento {@link String} Complemento do endereço
+     */
     public void setComplemento(String complemento) {
         this.complemento = complemento;
     }
 
+    /**
+     * Retorna a localidade (cidade) do endereço.
+     * @return {@link String} Localidade do endereço
+     */
     public String getLocalidade() {
         return localidade;
     }
 
+    /**
+     * Define a localidade (cidade) do endereço.
+     * @param localidade {@link String} Localidade do endereço
+     */
     public void setLocalidade(String localidade) {
         this.localidade = localidade;
     }
 
+    /**
+     * Retorna a região do endereço.
+     * @return {@link String} Região do endereço
+     */
     public String getRegiao() {
         return regiao;
     }
 
+    /**
+     * Define a região do endereço.
+     * @param regiao {@link String} Região do endereço
+     */
     public void setRegiao(String regiao) {
         this.regiao = regiao;
     }
 
-    public static Endereco BuscarEnderecoPorCep(String cep) {
+
+    /**
+     * Consulta a API ViaCEP e retorna um {@link Endereco} com os dados correspondentes ao CEP informado.
+     *
+     * @param cep CEP a ser consultado (somente números, 8 dígitos)
+     * @return instância de {@link Endereco} preenchida, ou {@code null} se o CEP for inválido ou ocorrer erro
+     */
+    public static Endereco buscarEnderecoPorCep(String cep) {
         try {
             HttpClient client = HttpClient.newHttpClient();
             String viaCepUrl = "https://viacep.com.br/ws/" + cep + "/json";
@@ -132,7 +231,13 @@ public class Endereco implements IOperacoesPadrao {
         }
     }
 
-    public static Endereco BuscarPorId(String enderecoId) {
+    /**
+     * Busca e retorna o {@link Endereco} correspondente ao ID informado.
+     *
+     * @param enderecoId ID do endereço a ser buscado
+     * @return instância de {@link Endereco} encontrada, ou {@code null} se não existir
+     */
+    public static Endereco buscarPorId(String enderecoId) {
         try {
             ArrayList<Endereco> enderecos = database.lerRegistro(Endereco.class);
             for (Endereco end : enderecos) {
@@ -148,6 +253,11 @@ public class Endereco implements IOperacoesPadrao {
 
     }
 
+    /**
+     * {@inheritDoc}
+     * Valida: formato do CEP, tamanho mínimo do logradouro, bairro e localidade,
+     * tamanho da UF e número contendo ao menos um dígito.
+     */
     public ArrayList<String> verificarRegistro() {
         ArrayList<String> erros = new ArrayList<String>();
 
@@ -168,14 +278,14 @@ public class Endereco implements IOperacoesPadrao {
     }
 
     /**
-     * @return
+     * {@inheritDoc}
      */
     public String getId() {
         return getEnderecoId();
     }
 
     /**
-     * @return
+     * {@inheritDoc}
      */
     public boolean adicionar() {
         try {
@@ -188,14 +298,14 @@ public class Endereco implements IOperacoesPadrao {
     }
 
     /**
-     * @return
+     * {@inheritDoc}
      */
     public boolean remover() {
         return false;
     }
 
     /**
-     * @return
+     * {@inheritDoc}
      */
     public boolean editar() {
         try {
@@ -207,6 +317,11 @@ public class Endereco implements IOperacoesPadrao {
         }
     }
 
+    /**
+     * Exibe no console as informações do CEP formatadas.
+     *
+     * @param removeTitulo se {@code true}, suprime o cabeçalho da exibição
+     */
     public void exibirInfosCep(boolean removeTitulo) {
         if (!removeTitulo)
             System.out.println("\033[1;32m=====| Informações do CEP |=====\033[m");

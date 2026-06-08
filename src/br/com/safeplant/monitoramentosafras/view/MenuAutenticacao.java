@@ -9,15 +9,25 @@ import br.com.safeplant.monitoramentosafras.models.Agricultor;
 import br.com.safeplant.monitoramentosafras.models.Endereco;
 import br.com.safeplant.monitoramentosafras.models.Usuario;
 
+/**
+ * Menu responsável pelo fluxo de autenticação e cadastro de novos usuários no sistema.
+ */
 public class MenuAutenticacao {
     private final Scanner scanner;
     private final Console console;
 
+    /**
+     * Construtor padrão. Inicializa o scanner e o console para leitura de entrada do usuário.
+     */
     public MenuAutenticacao() {
         this.scanner = new Scanner(System.in);
         this.console = System.console();
     }
 
+    /**
+     * Exibe a tela de login, solicitando usuário e senha até que a autenticação
+     * seja realizada com sucesso, redirecionando para o {@link MenuPrincipal}.
+     */
     public void exibirLogin() {
         System.out.println("\n\n\033[1;32m=====| BEM VINDO AO SAFE PLANT |=====\033[m");
 
@@ -47,6 +57,10 @@ public class MenuAutenticacao {
     }
 
 
+    /**
+     * Exibe o fluxo completo de cadastro em três etapas:
+     * dados do usuário, dados do agricultor e endereço.
+     */
     public void exibirCadastro() {
         System.out.println("\n\n\033[1;32m=====| CADASTRO DE USUARIO (1/3) |=====\033[m\n");
         Usuario novoUsuario = exibirCadastroUsuario();
@@ -78,6 +92,11 @@ public class MenuAutenticacao {
         }
     }
 
+
+    /**
+     * Exibe o fluxo completo de cadastro em três etapas:
+     * dados do usuário, dados do agricultor e endereço.
+     */
     private String lerSenha() {
         if (console != null)
             return new String(this.console.readPassword("Senha: "));
@@ -87,6 +106,12 @@ public class MenuAutenticacao {
         }
     }
 
+    /**
+     * Exibe o formulário de cadastro de {@link Usuario}, coletando e validando
+     * os dados antes de retornar a instância criada.
+     *
+     * @return instância de {@link Usuario} válida, ou {@code null} se o cadastro for cancelado
+     */
     private Usuario exibirCadastroUsuario() {
         Usuario novoUsuario;
         boolean usuarioValido;
@@ -123,6 +148,13 @@ public class MenuAutenticacao {
         return novoUsuario;
     }
 
+    /**
+     * Exibe o formulário de cadastro de {@link Agricultor} a partir de um {@link Usuario}
+     * existente, coletando e validando CPF, data de nascimento e celular.
+     *
+     * @param novoUsuario instância de {@link Usuario} base para criação do agricultor
+     * @return instância de {@link Agricultor} válida, ou {@code null} se o cadastro for cancelado
+     */
     private Agricultor exibirCadastroAgricultor(Usuario novoUsuario) {
         Agricultor novoAgro;
         boolean agricultorValido;
@@ -156,6 +188,13 @@ public class MenuAutenticacao {
         return novoAgro;
     }
 
+    /**
+     * Exibe o formulário de cadastro de {@link Endereco}, permitindo busca por CEP
+     * via ViaCEP ou preenchimento manual, validando os dados antes de retornar.
+     *
+     * @param novoAgro instância de {@link Agricultor} ao qual o endereço será associado
+     * @return instância de {@link Endereco} válida e confirmada pelo usuário
+     */
     private Endereco exibirCadastroEndereco(Agricultor novoAgro) {
         System.out.println("Digite \033[1;31mSair\033[m para encerrar o cadastro.");
         System.out.println("Digite as informações solicitadas abaixo:\n");
@@ -164,7 +203,7 @@ public class MenuAutenticacao {
         Endereco novoEndereco = new Endereco();
         do {
             String cep = Interacao.inputString("CEP: ");
-            Endereco enderecoPorCep = Endereco.BuscarEnderecoPorCep(cep);
+            Endereco enderecoPorCep = Endereco.buscarEnderecoPorCep(cep);
             if (enderecoPorCep == null) {
                 System.out.println("\033[1;93m⚠ CEP não encontrado ou inválido.\033[m");
                 buscaPorCep = Interacao.inputBooleano("Deseja continuar com o cadastro manual? [s/n]: ");

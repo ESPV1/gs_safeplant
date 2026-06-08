@@ -12,23 +12,45 @@ import java.util.Arrays;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+/**
+ * Menu responsável pelo gerenciamento de safras do agricultor autenticado,
+ * permitindo visualizar, registrar, editar e excluir safras.
+ */
 public class MenuSafra {
     private final Scanner scanner;
     private Agricultor agricultor;
 
+    /**
+     * Cria o menu de safras para o agricultor informado.
+     *
+     * @param agricultor instância de {@link Agricultor} autenticado na sessão
+     */
     public MenuSafra(Agricultor agricultor) {
         this.scanner = new Scanner(System.in);
         this.agricultor = agricultor;
     }
 
+    /**
+     * Retorna o agricultor associado ao menu.
+     * @return {@link Agricultor} atual do menu
+     */
     public Agricultor getAgricultor() {
         return agricultor;
     }
 
+    /**
+     * Define o agricultor associado ao menu.
+     * @param agricultor {@link Agricultor} a ser definido
+     */
     private void setAgricultor(Agricultor agricultor) {
         this.agricultor = agricultor;
     }
 
+
+    /**
+     * Exibe o menu principal de gerenciamento de safras,
+     * permitindo navegar entre as opções disponíveis.
+     */
     public void exibir() {
         String opcao;
         do {
@@ -68,6 +90,10 @@ public class MenuSafra {
     }
 
 
+    /**
+     * Exibe a lista de safras do agricultor autenticado e permite
+     * selecionar uma para visualizar os seus detalhes.
+     */
     public void menuMinhasSafras() {
         int safraIdx = -1;
         ArrayList<Safra> safras = Safra.pegarMinhasSafras(getAgricultor().getAgricultorId());
@@ -94,6 +120,11 @@ public class MenuSafra {
         }
     }
 
+    /**
+     * Exibe a lista de safras do agricultor e retorna a safra selecionada.
+     *
+     * @return {@link Safra} selecionada pelo usuário, ou {@code null} se voltar sem selecionar
+     */
     public Safra verMinhasSafras() {
         int safraIdx = -1;
         ArrayList<Safra> safras = Safra.pegarMinhasSafras(getAgricultor().getAgricultorId());
@@ -119,6 +150,10 @@ public class MenuSafra {
         return null;
     }
 
+    /**
+     * Exibe o fluxo de registro de uma nova safra em duas etapas:
+     * informações principais e dados do terreno, validando cada etapa antes de persistir.
+     */
     public void menuNovaSafra() {
         boolean safraValida;
         Safra novaSafra;
@@ -193,16 +228,28 @@ public class MenuSafra {
             System.out.println("Falha ao salvar a Safra!");
     }
 
+    /**
+     * Exibe os detalhes da safra informada e aguarda confirmação do usuário para voltar.
+     *
+     * @param safra instância de {@link Safra} cujos detalhes serão exibidos
+     */
     public void menuDetalhesSafra(Safra safra) {
         System.out.println("\n\033[1;96m====| DETALHES DE " + safra.getNomeSafra().toUpperCase() + " |=====\033[m");
         safra.exibir();
         Interacao.aguardarTecla(scanner);
     }
 
+    /**
+     * Exibe o relatório semanal das safras do agricultor.
+     */
     public void menuRelatorio() {
 
     }
 
+    /**
+     * Exibe o menu de edição de safras, permitindo atualizar cultivos,
+     * status, data de encerramento ou excluir a safra selecionada.
+     */
     public void menuEditarSafra() {
         String opcao;
         do {
@@ -242,6 +289,12 @@ public class MenuSafra {
         } while (!opcao.equals("5"));
     }
 
+    /**
+     * Atualiza a lista de produtos cultivados da safra informada,
+     * permitindo adicionar novos itens do estoque disponível.
+     *
+     * @param safra instância de {@link Safra} a ter os cultivos atualizados
+     */
     public void atualizarCultivados(Safra safra) {
         ArrayList<Produto> cultivados = safra.getCultivados();
         if (cultivados.isEmpty()) {
@@ -255,12 +308,25 @@ public class MenuSafra {
 
     }
 
+    /**
+     * Solicita ao usuário que selecione os produtos a serem cultivados
+     * na safra a partir do estoque disponível do agricultor.
+     *
+     * @return {@link ArrayList} de {@link Produto} selecionados para cultivo
+     */
     public ArrayList<Produto> selecionarCultivados() {
         MenuProduto menuProduto = new MenuProduto(getAgricultor());
         ArrayList<Produto> cultivados = new ArrayList<Produto>();
         return definirCultivos(cultivados, menuProduto);
     }
 
+    /**
+     * Solicita ao usuário que selecione novos produtos a serem cultivados,
+     * exibindo previamente os já cadastrados na safra e excluindo-os do estoque disponível.
+     *
+     * @param jaCultivados {@link ArrayList} de {@link Produto} já presentes na safra
+     * @return {@link ArrayList} de {@link Produto} atualizada com os novos cultivos
+     */
     public ArrayList<Produto> selecionarCultivados(ArrayList<Produto> jaCultivados) {
         MenuProduto menuProduto = new MenuProduto(getAgricultor());
         if (jaCultivados.isEmpty()) {
@@ -271,6 +337,14 @@ public class MenuSafra {
         return definirCultivos(jaCultivados, menuProduto);
     }
 
+    /**
+     * Conduz o fluxo interativo de seleção de produtos do estoque para cultivo,
+     * permitindo adicionar múltiplos itens até que o usuário encerre.
+     *
+     * @param cultivados lista inicial de {@link Produto} já selecionados
+     * @param menu       instância de {@link MenuProduto} utilizada para exibição formatada
+     * @return {@link ArrayList} de {@link Produto} com todos os cultivos definidos
+     */
     private ArrayList<Produto> definirCultivos(ArrayList<Produto> cultivados, MenuProduto menu) {
         boolean finalizarCultivados = false;
         do {
@@ -311,6 +385,12 @@ public class MenuSafra {
         return cultivados;
     }
 
+    /**
+     * Solicita ao usuário que selecione um novo {@link StatusSafra} diferente do atual.
+     *
+     * @param statusAtual status atual da safra, impedido de ser reselecionado
+     * @return novo {@link StatusSafra} selecionado pelo usuário
+     */
     private StatusSafra selecionarNovoStatus(StatusSafra statusAtual) {
         StatusSafra novoStatus = statusAtual;
         System.out.println("\n\033[1;36m=====| ATUALIZAR STATUS SAFRA |=====\033[m");
@@ -339,6 +419,12 @@ public class MenuSafra {
         return novoStatus;
     }
 
+    /**
+     * Exibe o fluxo de atualização da data de encerramento da safra,
+     * validando o formato antes de persistir a alteração.
+     *
+     * @param safra instância de {@link Safra} a ter a data de encerramento atualizada
+     */
     private void atualizadorParaDataFinal(Safra safra) {
         String novaData;
         boolean validoDataFinal = false;
@@ -370,6 +456,11 @@ public class MenuSafra {
         }
     }
 
+    /**
+     * Solicita confirmação do usuário e exclui a safra informada do sistema.
+     *
+     * @param safra instância de {@link Safra} a ser excluída
+     */
     private void excluirSafra(Safra safra) {
         safra.exibir();
         System.out.println("\033[1;96m==================\033[m\n");

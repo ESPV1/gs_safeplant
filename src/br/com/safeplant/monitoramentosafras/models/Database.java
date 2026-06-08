@@ -31,10 +31,9 @@ public class Database<T extends IOperacoesPadrao> implements IDatabase<T> {
     }
 
     /**
-     * Lê todos os registros do arquivo JSON correspondente à entidade informada.
-     *
-     * @param classe tipo da entidade a ser lida
-     * @return lista de registros encontrados, ou lista vazia em caso de erro
+     * {@inheritDoc}
+     * Os registros são lidos de um arquivo JSON correspondente à entidade.
+     * Em caso de erro, retorna uma lista vazia.
      */
     public ArrayList<T> lerRegistro(Class<T> classe) {
         try {
@@ -53,11 +52,9 @@ public class Database<T extends IOperacoesPadrao> implements IDatabase<T> {
     }
 
     /**
-     * Adiciona uma nova entidade ao arquivo JSON correspondente.
-     *
-     * @param entidade objeto a ser adicionado
-     * @param classe   tipo da entidade a ser salva
-     * @return {@code true} se salvo com sucesso, {@code false} caso contrário
+     * {@inheritDoc}
+     * O registro é persistido num arquivo JSON correspondente à entidade.
+     * Em caso de erro, retorna {@code false}.
      */
     public boolean criarRegistro(T entidade, Class<T> classe) {
         try {
@@ -83,11 +80,9 @@ public class Database<T extends IOperacoesPadrao> implements IDatabase<T> {
     }
 
     /**
-     * Substitui uma entidade existente no arquivo JSON pelo objeto atualizado.
-     *
-     * @param entidade objeto que será atualizado
-     * @param classe   tipo da entidade a ser editada
-     * @return {@code true} se editado com sucesso, {@code false} caso contrário
+     * {@inheritDoc}
+     * A entidade é localizada pelo seu ‘ID’ e substituída no arquivo JSON correspondente.
+     * Retorna {@code false} se a entidade não for encontrada ou ocorrer erro.
      */
     public boolean editarRegistro(T entidade, Class<T> classe) {
         try {
@@ -125,11 +120,9 @@ public class Database<T extends IOperacoesPadrao> implements IDatabase<T> {
     }
 
     /**
-     * Remove uma entidade do arquivo JSON correspondente.
-     *
-     * @param entidade objeto a ser removido
-     * @param classe   tipo da entidade a ser removida
-     * @return {@code true} se removido com sucesso, {@code false} caso contrário
+     * {@inheritDoc}
+     * A entidade é localizada pelo seu ID e removida do arquivo JSON correspondente.
+     * Retorna {@code false} se a entidade não for encontrada ou ocorrer erro.
      */
     public boolean removerRegistro(T entidade, Class<T> classe) {
         try {
@@ -166,11 +159,8 @@ public class Database<T extends IOperacoesPadrao> implements IDatabase<T> {
     }
 
     /**
-     * Converte uma string JSON em um objeto Java do tipo especificado.
-     *
-     * @param json   string JSON a ser convertida
-     * @param classe tipo da entidade de destino
-     * @return objeto desserializado, ou {@code null} em caso de erro
+     * {@inheritDoc}
+     * Em caso de erro na desserialização, retorna {@code null}.
      */
     public T converterJsonParaJava(String json, Class<T> classe) {
         try {

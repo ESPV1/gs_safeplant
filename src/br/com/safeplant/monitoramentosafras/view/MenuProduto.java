@@ -2,7 +2,6 @@ package br.com.safeplant.monitoramentosafras.view;
 
 import br.com.safeplant.monitoramentosafras.enums.TipoProduto;
 import br.com.safeplant.monitoramentosafras.helper.Interacao;
-import br.com.safeplant.monitoramentosafras.helper.Verificador;
 import br.com.safeplant.monitoramentosafras.models.Agricultor;
 import br.com.safeplant.monitoramentosafras.models.Produto;
 
@@ -11,23 +10,44 @@ import java.util.Arrays;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+/**
+ * Menu responsável pelo gerenciamento de produtos do agricultor autenticado,
+ * permitindo visualizar, registrar e editar produtos.
+ */
 public class MenuProduto {
     private final Scanner scanner;
     private Agricultor agricultor;
 
+    /**
+     * Cria o menu de produtos para o agricultor informado.
+     *
+     * @param agricultor instância de {@link Agricultor} autenticado na sessão
+     */
     public MenuProduto(Agricultor agricultor) {
         this.scanner = new Scanner(System.in);
         this.agricultor = agricultor;
     }
 
+    /**
+     * Retorna o agricultor associado ao menu.
+     * @return {@link Agricultor} atual do menu
+     */
     public Agricultor getAgricultor() {
         return agricultor;
     }
 
+    /**
+     * Define o agricultor associado ao menu.
+     * @param agricultor {@link Agricultor} a ser definido
+     */
     public void setAgricultor(Agricultor agricultor) {
         this.agricultor = agricultor;
     }
 
+    /**
+     * Exibe o menu principal de gerenciamento de produtos,
+     * permitindo navegar entre as opções disponíveis.
+     */
     public void exibir() {
         String opcao;
         do {
@@ -63,10 +83,17 @@ public class MenuProduto {
         } while (!opcao.equals("5"));
     }
 
+    /**
+     * Exibe os produtos cultivados pelo agricultor autenticado.
+     */
     public void menuProdutosCultivados() {
         System.out.println("Meus produtos cultivados");
     }
 
+    /**
+     * Exibe o estoque de produtos do agricultor autenticado,
+     * listando cada item com a sua cor correspondente ao tipo.
+     */
     private void menuExibirEstoque() {
         System.out.printf("\033[1;32m=====| ESTOQUE DE %s |=====\033[m]\n", agricultor.getPrimeiroNome().toUpperCase());
         ArrayList<Produto> produtos = new Produto().pegarMeusProdutos(this.agricultor.getAgricultorId());
@@ -89,6 +116,11 @@ public class MenuProduto {
         Interacao.aguardarTecla(scanner);
     }
 
+    /**
+     * Exibe o fluxo de registro de um novo produto, coletando
+     * nome, nome científico, tipo e tempo de colheita, validando
+     * os dados antes de persistir.
+     */
     public void menuRegistrarNovoProduto() {
         System.out.println("\033[1;32m=====| REGISTRO DE PRODUTO |=====\033[m");
 
@@ -129,10 +161,19 @@ public class MenuProduto {
             System.out.println("Falha ao salvar o produto!");
     }
 
+    /**
+     * Exibe o fluxo de edição de um produto existente.
+     */
     public void menuEditarProduto() {
 
     }
 
+    /**
+     * Solicita ao usuário que selecione um {@link TipoProduto} válido
+     * dentre os disponíveis no sistema.
+     *
+     * @return {@link TipoProduto} selecionado pelo usuário
+     */
     public TipoProduto selecionarTipoProduto() {
         boolean valorTipoValido;
 
@@ -158,6 +199,14 @@ public class MenuProduto {
         return TipoProduto.valueOf(valor.toUpperCase());
     }
 
+    /**
+     * Exibe o nome e nome científico do produto formatados com a cor
+     * ANSI correspondente ao seu {@link TipoProduto}.
+     *
+     * @param nome           nome do produto
+     * @param nomeCientifico nome científico do produto
+     * @param tipoProduto    tipo do produto para definição da cor
+     */
     public void mostrarProdutoPorCor(String nome, String nomeCientifico, TipoProduto tipoProduto) {
         String textoBase = "▸ \033[1;corm%s (%s)\033[m\n";
 
@@ -184,6 +233,16 @@ public class MenuProduto {
         }
         System.out.printf(textoFinal, nome, nomeCientifico);
     }
+
+    /**
+     * Exibe o nome e nome científico do produto formatados com a cor
+     * ANSI correspondente ao seu {@link TipoProduto}, precedidos por um índice.
+     *
+     * @param nome           nome do produto
+     * @param nomeCientifico nome científico do produto
+     * @param tipoProduto    tipo do produto para definição da cor
+     * @param index          índice a ser exibido antes do nome do produto
+     */
     public void mostrarProdutoPorCor(String nome, String nomeCientifico, TipoProduto tipoProduto, int index) {
         String textoBase = "\033[1;36m[%d]\033[m \033[1;corm%s (%s)\033[m\n";
 

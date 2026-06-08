@@ -4,15 +4,29 @@ import br.com.safeplant.monitoramentosafras.models.Agricultor;
 
 import java.util.Scanner;
 
+/**
+ * Menu principal do sistema, exibido após autenticação bem-sucedida,
+ * permitindo navegar entre as funcionalidades disponíveis.
+ */
 public class MenuPrincipal {
     private final Scanner scanner;
     private final Agricultor agricultorAutenticado;
 
+    /**
+     * Cria o menu principal buscando o {@link Agricultor} correspondente
+     * ao ID de usuário autenticado.
+     *
+     * @param usuarioId ID do usuário autenticado na sessão
+     */
     public MenuPrincipal(String usuarioId) {
         this.scanner = new Scanner(System.in);
-        this.agricultorAutenticado = Agricultor.GetAgricultorPorUsuarioId(usuarioId);
+        this.agricultorAutenticado = Agricultor.getAgricultorPorUsuarioId(usuarioId);
     }
 
+    /**
+     * Exibe o menu principal do sistema, permitindo navegar entre
+     * gerenciamento de safras, produtos, perfil e encerramento de sessão.
+     */
     public void exibir() {
         String opcao;
         do {

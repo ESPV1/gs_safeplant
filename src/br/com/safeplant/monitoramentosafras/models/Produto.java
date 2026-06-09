@@ -188,6 +188,23 @@ public class Produto implements IProduto {
      */
     public boolean remover() {
         try {
+            ArrayList<Safra> safras = Safra.pegarMinhasSafras(getAgricultorId());
+            ArrayList<Safra> safrasParaEditar = new ArrayList<>();
+
+            for (Safra safra : new ArrayList<>(safras)) {
+                for (Produto cultivo : new ArrayList<>(safra.getCultivados())) {
+                    if (getProdutoId().equalsIgnoreCase(cultivo.getProdutoId()))
+                        safra.getCultivados().remove(cultivo);
+                        safrasParaEditar.add(safra);
+                }
+            }
+
+            if (!safrasParaEditar.isEmpty()) {
+                for (Safra safra : safrasParaEditar) {
+                    safra.editar();
+                }
+            }
+
             return database.removerRegistro(this, Produto.class);
         }
         catch (Exception ex) {
@@ -323,6 +340,13 @@ public class Produto implements IProduto {
         return false;
     }
 
+    /**
+     * Retorna um booleano caso o produto partindo do seu nome já exista no estoque do agricultor
+     *
+     * @param produtos Lista de produtos que irá ser procurada
+     * @param prodAEncontrar Produto que desejamos verificar se já existe
+     * @return {@link Boolean} Verdadeiro caso já possua no estoque e Falso para caso não exista.
+     * */
     private static boolean existeProdutoPorNome(ArrayList<Produto> produtos, Produto prodAEncontrar) {
         for (Produto prodF : produtos) {
             if (prodF.getNome().equalsIgnoreCase(prodAEncontrar.getNome()))
@@ -331,6 +355,13 @@ public class Produto implements IProduto {
         return false;
     }
 
+    /**
+     * Retorna um booleano caso o produto partindo do seu nome cientifico já exista no estoque do agricultor
+     *
+     * @param produtos Lista de produtos que irá ser procurada
+     * @param prodAEncontrar Produto que desejamos verificar se já existe
+     * @return {@link Boolean} Verdadeiro caso já possua no estoque e Falso para caso não exista.
+     * */
     private static boolean existeProdutoPorNomeCientifico(ArrayList<Produto> produtos, Produto prodAEncontrar) {
         for (Produto prodF : produtos) {
             if (prodF.getNome().equalsIgnoreCase(prodAEncontrar.getNomeCientifico()))

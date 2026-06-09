@@ -1,24 +1,13 @@
 [
   {
-    "enderecoId": "1d523e05-6094-4e0c-8858-1df00f09f1ab",
-    "cep": "04094-050",
-    "logradouro": "Avenida Pedro Álvares Cabral",
-    "numero": "11",
-    "bairro": "Parque Ibirapuera",
-    "localidade": "São Paulo",
-    "regiao": "Sudeste",
-    "uf": "SP",
-    "complemento": ""
-  },
-  {
-    "enderecoId": "05f5b453-9a84-4152-b3c8-698f57311c04",
-    "cep": "04094-050",
-    "logradouro": "Avenida Pedro Álvares Cabral",
+    "enderecoId": "b3948604-9388-4095-b83d-4b14a9af8be6",
+    "cep": "04094-040",
+    "logradouro": "Viaduto dos Imigrantes",
     "numero": "22",
     "bairro": "Parque Ibirapuera",
     "localidade": "São Paulo",
     "regiao": "Sudeste",
     "uf": "SP",
-    "complemento": ""
+    "complemento": "teste"
   }
 ]

@@ -1,0 +1,52 @@
+[
+  {
+    "safraId": "561677cc-a60f-4bbe-915b-470531c21870",
+    "nomeSafra": "Safra para cultivo de Laranja",
+    "dataInicio": "2026-06-07",
+    "dataFim": "07/10/2007",
+    "status": "EM_ANDAMENTO",
+    "cultivados": [
+      {
+        "produtoId": "64dc0f9f-2d89-4dbc-a47b-065c0fcf4933",
+        "nome": "Uva",
+        "tipoProduto": "FRUTA",
+        "nomeCientifico": "Vitis vinifera",
+        "tempoColheitaEmDias": 20,
+        "agricultorId": "49f80cd1-dfe4-4c8a-aaa3-db343ef0d434"
+      },
+      {
+        "produtoId": "fe503212-185a-4609-8f8d-c3ed0598c3be",
+        "nome": "Laranja",
+        "tipoProduto": "FRUTA",
+        "nomeCientifico": "Citrus sinensis",
+        "tempoColheitaEmDias": 30,
+        "agricultorId": "49f80cd1-dfe4-4c8a-aaa3-db343ef0d434"
+      }
+    ],
+    "agricultorId": "49f80cd1-dfe4-4c8a-aaa3-db343ef0d434",
+    "area": 20000.0,
+    "latitude": -1.0,
+    "longitude": -1.0
+  },
+  {
+    "safraId": "74933786-7e23-4b71-a346-e9923309e746",
+    "nomeSafra": "Safra Teste",
+    "dataInicio": "07/06/2026",
+    "dataFim": "10/06/2028",
+    "status": "PLANEJADA",
+    "cultivados": [
+      {
+        "produtoId": "cd4971d4-d07f-479b-966d-849f8567a059",
+        "nome": "Batata Inglesa",
+        "tipoProduto": "CEREAL",
+        "nomeCientifico": "Solanum tuberosum.",
+        "tempoColheitaEmDias": 60,
+        "agricultorId": "49f80cd1-dfe4-4c8a-aaa3-db343ef0d434"
+      }
+    ],
+    "agricultorId": "49f80cd1-dfe4-4c8a-aaa3-db343ef0d434",
+    "area": 21233.0,
+    "latitude": -1.0,
+    "longitude": -1.0
+  }
+]

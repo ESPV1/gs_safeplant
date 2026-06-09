@@ -431,7 +431,7 @@ public class MenuProduto {
                 .collect(Collectors.joining(" - "));
         String valor;
         do {
-            System.out.printf("\033[1mTipos Disponíveis:\033[m %s", tipos);
+            System.out.printf("\033[1mTipos Disponíveis:\033[m %s\n", tipos);
             System.out.print("\033[1mTipo do Produto:\033[m ");
             valor = scanner.nextLine();
 

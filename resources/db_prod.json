@@ -22,21 +22,5 @@
     "nomeCientifico": "Solanum tuberosum.",
     "tempoColheitaEmDias": 60,
     "agricultorId": "49f80cd1-dfe4-4c8a-aaa3-db343ef0d434"
-  },
-  {
-    "produtoId": "c359627b-6eaa-4f5e-9410-e619fa5cadcf",
-    "nome": "Banana",
-    "tipoProduto": "FRUTA",
-    "nomeCientifico": "banana cientifica",
-    "tempoColheitaEmDias": 350,
-    "agricultorId": "bc7ab750-d4f6-43b5-a001-ccec3770f1b2"
-  },
-  {
-    "produtoId": "4699142b-075d-41ca-a68e-d0b926d21a5c",
-    "nome": "Leite",
-    "tipoProduto": "LACTINIO",
-    "nomeCientifico": "leite leite",
-    "tempoColheitaEmDias": 30,
-    "agricultorId": "bc7ab750-d4f6-43b5-a001-ccec3770f1b2"
   }
 ]

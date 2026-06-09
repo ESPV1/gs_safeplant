@@ -48,5 +48,26 @@
     "area": 21233.0,
     "latitude": -1.0,
     "longitude": -1.0
+  },
+  {
+    "safraId": "e56b7ace-e12a-4929-9031-53218481865a",
+    "nomeSafra": "Safra para cultivo de Laranja",
+    "dataInicio": "09/06/2026",
+    "dataFim": "09/06/2027",
+    "status": "PLANEJADA",
+    "cultivados": [
+      {
+        "produtoId": "fe503212-185a-4609-8f8d-c3ed0598c3be",
+        "nome": "Laranja",
+        "tipoProduto": "FRUTA",
+        "nomeCientifico": "Citrus sinensis",
+        "tempoColheitaEmDias": 30,
+        "agricultorId": "49f80cd1-dfe4-4c8a-aaa3-db343ef0d434"
+      }
+    ],
+    "agricultorId": "49f80cd1-dfe4-4c8a-aaa3-db343ef0d434",
+    "area": 4000.0,
+    "latitude": -1.0,
+    "longitude": -1.0
   }
 ]

@@ -452,6 +452,7 @@ public class MenuProduto {
      * Solicita ao usuário que selecione um {@link TipoProduto} válido
      * dentre os disponíveis no sistema.
      *
+     * @param tipoAtualProduto Tipo atual do produto antes da edição
      * @return {@link TipoProduto} selecionado pelo usuário
      */
     public TipoProduto selecionarTipoProduto(TipoProduto tipoAtualProduto) {

@@ -2,7 +2,13 @@ package br.com.safeplant.monitoramentosafras;
 
 import br.com.safeplant.monitoramentosafras.view.MenuAutenticacao;
 
+/**
+ * Classe principal
+ * */
 public class Main {
+    /**
+     * Metodo principal
+     * */
     public static void main(String[] args) {
         try {
             MenuAutenticacao menuAutenticacao = new MenuAutenticacao();

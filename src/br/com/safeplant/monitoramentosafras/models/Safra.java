@@ -241,7 +241,7 @@ public class Safra extends Terreno implements ISafra {
         }
     }
     /**
-     * Exibe no console as informações da safra formatadas com cores ANSI:
+     * Exibe no console as informações da safra formatada de maneira simples:
      * data de início, data de encerramento, status e produtos cultivados.
      */
     public void exibir() {
@@ -250,7 +250,7 @@ public class Safra extends Terreno implements ISafra {
         System.out.printf("\033[1mStatus atual: \033[34m%s\033[m\n", getStatus().getDescricao());
         System.out.print("\033[1mCultivados na Safra: \033[36m");
         for (int i = 0; i < getCultivados().size(); i++) {
-            System.out.print(getCultivados().get(i).getNomeFormatado());
+            System.out.printf("%s (%s)",getCultivados().get(i).getNomeFormatado(), getCultivados().get(i).getNomeCientifico());
             if (i < getCultivados().size() - 1)
                 System.out.print(", ");
         }

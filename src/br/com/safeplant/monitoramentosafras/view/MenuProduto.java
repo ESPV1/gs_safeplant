@@ -5,6 +5,7 @@ import br.com.safeplant.monitoramentosafras.enums.TipoProduto;
 import br.com.safeplant.monitoramentosafras.helper.Interacao;
 import br.com.safeplant.monitoramentosafras.models.Agricultor;
 import br.com.safeplant.monitoramentosafras.models.Produto;
+import br.com.safeplant.monitoramentosafras.models.Safra;
 import com.sun.source.doctree.EscapeTree;
 
 import java.security.spec.ECField;
@@ -90,7 +91,20 @@ public class MenuProduto {
      * Exibe os produtos cultivados pelo agricultor autenticado.
      */
     public void menuProdutosCultivados() {
-        System.out.println("Meus produtos cultivados");
+        try {
+            System.out.println("\033[1;32m=====| PRODUTOS CULTIVADOS |=====\033[m");
+            ArrayList<Safra> safraDoAgricultor = Safra.pegarMinhasSafras(getAgricultor().getAgricultorId());
+            System.out.printf("\033[1m%s possui %d Safras em seu nome\033[m", getAgricultor().getPrimeiroNome(), safraDoAgricultor.size());
+            for (Safra safra : safraDoAgricultor) {
+                System.out.printf("\n\n\033[1;94m=====| %s |=====\033[m\n", safra.getNomeSafra().toUpperCase());
+                safra.exibir();
+            }
+            System.out.println("\n\033[1;94m===========================\033[m");
+            Interacao.aguardarTecla(scanner);
+        }
+        catch (Exception ex) {
+            System.out.println("\033[1;31mOcorreu um erro ao tentar ver os produtos cultivados do agricultor\033[m\n");
+        }
     }
 
     /**

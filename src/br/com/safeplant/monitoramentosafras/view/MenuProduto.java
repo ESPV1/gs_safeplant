@@ -1,10 +1,13 @@
 package br.com.safeplant.monitoramentosafras.view;
 
+import br.com.safeplant.monitoramentosafras.enums.StatusSafra;
 import br.com.safeplant.monitoramentosafras.enums.TipoProduto;
 import br.com.safeplant.monitoramentosafras.helper.Interacao;
 import br.com.safeplant.monitoramentosafras.models.Agricultor;
 import br.com.safeplant.monitoramentosafras.models.Produto;
+import com.sun.source.doctree.EscapeTree;
 
+import java.security.spec.ECField;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -52,7 +55,7 @@ public class MenuProduto {
         String opcao;
         do {
             System.out.flush();
-            System.out.println("\033[1;32m\n=====| GERENCIAMENTO DE PRODUTOS E CULTIVOS | =====\033[1;32m");
+            System.out.println("\033[1;32m\n=====| GERENCIAMENTO DE PRODUTOS E CULTIVOS |=====\033[1;32m");
             System.out.println("\033[1;36m[1]\033[m Produtos Cultivados");
             System.out.println("\033[1;36m[2]\033[m Exibir Estoque");
             System.out.println("\033[1;36m[3]\033[m Registrar Novo Produto");
@@ -103,17 +106,36 @@ public class MenuProduto {
             return;
         }
 
-        System.out.println("SUMÁRIO");
+        for (Produto prod : produtos) {
+            mostrarProdutoPorCor(prod);
+        }
+        Interacao.aguardarTecla(scanner);
+    }
+
+    /**
+     * Exibe o estoque de produtos sobre uma lista enviada,
+     * listando cada item com a sua cor correspondente ao tipo.
+     *
+     * @param produtosAListar Lista de produtos que será listada.
+     */
+    private void menuExibirEstoque(ArrayList<Produto> produtosAListar) {
+        System.out.printf("\033[1;32m=====| ESTOQUE DE %s |=====\033[m]\n", agricultor.getPrimeiroNome().toUpperCase());
+        if (produtosAListar.isEmpty()) {
+            System.out.println("Estoque Vazio.");
+            return;
+        }
+
+        System.out.println("\033[1;94m=====| SUMÁRIO |=====\033[m");
         System.out.println("\033[1;35m[LEGUME]\033[m");
         System.out.println("\033[1;92m[VEGETAL]\033[m");
         System.out.println("\033[1;33m[FRUTA]\033[m");
         System.out.println("\033[1;93m[CEREAL]\033[m");
         System.out.println("\033[1;34m[LACTINIO]\033[m\n");
-        System.out.println("ESTOQUE: ");
-        for (Produto prod : produtos) {
-            mostrarProdutoPorCor(prod.getNome(), prod.getNomeCientifico(), prod.getTipoProduto());
+        System.out.println("\033[1;94m=====| ESTOQUE |=====\033[m");
+        for (int i = 0; i < produtosAListar.size(); i++) {
+            Produto prod = produtosAListar.get(i);
+            mostrarProdutoPorCor(prod.getNome(), prod.getNomeCientifico(), prod.getTipoProduto(), i+1);
         }
-        Interacao.aguardarTecla(scanner);
     }
 
     /**
@@ -162,10 +184,223 @@ public class MenuProduto {
     }
 
     /**
-     * Exibe o fluxo de edição de um produto existente.
+     * Exibe o fluxo para gerenciamento dos produtos existentes.
      */
     public void menuEditarProduto() {
+        try {
+            String opcao;
+            do {
+                Produto produto = escolherProduto();
 
+                if (produto == null)
+                    return;
+
+                System.out.printf("\n\033[1;96m=====| OPERAÇÕES PARA %s |=====\033[m\n", produto.getNome().toUpperCase());
+                System.out.println("\033[1;36m[1]\033[m Atualizar Nome");
+                System.out.println("\033[1;36m[2]\033[m Atualizar Nome Científico");
+                System.out.println("\033[1;36m[3]\033[m Atualizar Tempo médio de colheita");
+                System.out.println("\033[1;36m[4]\033[m Atualizar Tipo do Produto");
+                System.out.println("\033[1;36m[5]\033[m Excluir Produto");
+                System.out.println("\033[1;36m[6]\033[m Voltar");
+                opcao = Interacao.inputString("Escolha uma opção: ");
+
+                switch (opcao) {
+                    case "1":
+                        atualizarNomes(produto, "comum");
+                        return;
+                    case "2":
+                        atualizarNomes(produto, "cientifico");
+                        return;
+                    case "3":
+                        atualizarTempoMedioColheita(produto);
+                        return;
+                    case "4":
+                        atualizarTipoProduto(produto);
+                        return;
+                    case "5":
+                        excluirProduto(produto);
+                        return;
+                    case "6":
+                        break;
+                    default:
+                        System.out.println("Opção inválida");
+                        break;
+                }
+            } while (!opcao.equals("6"));
+        }
+        catch (Exception ex) {
+            System.out.println("\033[1;31mOcorreu um erro durante a execução \033[m");
+            return;
+        }
+    }
+
+    /**
+     * Escolhe o produto que será editado no menuEditarProduto
+     *
+     * @return {@link Produto} Retorna um objeto do tipo Produto que será manipulado
+     * */
+    public Produto escolherProduto() {
+        try {
+            ArrayList<Produto> meusProdutos = new Produto().pegarMeusProdutos(getAgricultor().getAgricultorId());
+            menuExibirEstoque(meusProdutos);
+            System.out.println("\n\033[1;93mDigite 0 para voltar ao menu\033[m");
+            int opcao = Interacao.inputInteiro("Escolha o produto: ");
+
+            if (opcao == 0)
+                return null;
+
+            while (opcao < 0 || opcao > meusProdutos.size()) {
+                System.out.println("\033[1;31mOpção inválida.\033[m");
+                opcao = Interacao.inputInteiro("Escolha o produto: ");
+            }
+            return meusProdutos.get(opcao-1);
+        }
+        catch (Exception ex) {
+            System.out.println("\033[1;31mProduto selecionado não existe\033[m");
+            return null;
+        }
+    }
+
+    /**
+     * Atualiza o nome cientifico ou comum com base num objeto produto e tipo do nome enviado
+     *
+     * @param produto Produto que será editado
+     * @param tipoNome do tipo {@link String} indicando qual nome será editado
+     * */
+    public void atualizarNomes(Produto produto, String tipoNome) {
+        if (!(tipoNome.equalsIgnoreCase("cientifico") || tipoNome.equalsIgnoreCase("comum"))) {
+            System.out.println("Tipo de nome inválido");
+            return;
+        }
+        try {
+            if (tipoNome.equalsIgnoreCase("cientifico")) {
+                System.out.println("\n\033[1;93mDigite 0 para voltar o menu\033[m");
+                System.out.printf("\033[1mNome Científico atual: %s\033[m\n", produto.getNomeCientifico());
+                String novoNomeCientifico = Interacao.inputString("\033[1mNovo nome científico: \033[m ");
+
+                while (novoNomeCientifico.isEmpty() || novoNomeCientifico.equalsIgnoreCase(produto.getNomeCientifico()) || novoNomeCientifico.split(" ").length != 2) {
+                    if (novoNomeCientifico.equalsIgnoreCase("0")) return;
+
+                    System.out.println("\n\033[1;93mNome científico inválido. Tente novamente\033[m");
+                    System.out.printf("\033[1mNome Científico atual: %s\033[m\n", produto.getNomeCientifico());
+                    novoNomeCientifico = Interacao.inputString("\033[1mNovo nome científico: \033[m ");
+                }
+                produto.setNomeCientifico(novoNomeCientifico);
+            } else {
+                System.out.println("\n\033[1;93mDigite 0 para voltar o menu\033[m");
+                System.out.printf("\033[1mNome atual: %s\033[m\n", produto.getNome());
+                String novoNome = Interacao.inputString("\033[1mNovo nome: \033[m ");
+
+                while (novoNome.isEmpty() || novoNome.equalsIgnoreCase(produto.getNome())) {
+                    if (novoNome.equalsIgnoreCase("0")) return;
+
+                    System.out.println("\n\033[1;93mNome inválido. Tente novamente\033[m");
+                    System.out.printf("\033[1mNome atual: %s\033[m\n", produto.getNome());
+                    novoNome = Interacao.inputString("\033[1mNovo nome: \033[m ");
+                }
+                produto.setNome(novoNome);
+            }
+
+            boolean produtoEditado = produto.editar();
+            if (produtoEditado)
+                System.out.println("\033[1;92mNome do produto alterado com sucesso!\033[m");
+            else
+                System.out.println("\033[1;31mFalha ao editar nome do produto\033[m");
+        }
+        catch (Exception ex) {
+            System.out.println("\033[1;31mOcorreu um erro durante a atualização do nome\033[m");
+        }
+    }
+
+    /**
+     * Exibe o fluxo e atualiza o Tempo médio de colheita do produto em dias
+     *
+     * @param produto {@link Produto} que será editado
+     * */
+    public void atualizarTempoMedioColheita(Produto produto) {
+        try {
+            System.out.println("\033[1;93mDigite 0 para voltar o menu\033[m");
+            System.out.printf("\033[1mTempo médio de colheita atual: %d dias\033[m\n", produto.getTempoColheitaEmDias());
+            int novoTempoColheita = Interacao.inputInteiro("\033[1mNovo tempo de colheita: \033[m ");
+
+            while (novoTempoColheita < 1 || novoTempoColheita > 999) {
+                if (novoTempoColheita == 0) return;
+
+                System.out.println("\033[1;93mDigite 0 para voltar o menu\033[m");
+                System.out.printf("\033[1mTempo médio de colheita atual: %d dias\033[m\n", produto.getTempoColheitaEmDias());
+                novoTempoColheita = Interacao.inputInteiro("\033[1mNovo tempo de colheita: \033[m ");
+            }
+
+            produto.setTempoColheitaEmDias(novoTempoColheita);
+
+            boolean produtoEditado = produto.editar();
+            if (produtoEditado)
+                System.out.println("\033[1;92mTempo de colheita em dias do produto alterado com sucesso!\033[m");
+            else
+                System.out.println("\033[1;31mFalha ao editar o tempo de colheita\033[m");
+        }
+        catch (Exception ex) {
+            System.out.println("\033[1;31mOcorreu um erro durante a atualização do tempo médio de colheita\033[m");
+        }
+    }
+
+    /**
+     * Exibe o fluxo e atualiza o tipo do produto
+     *
+     * @param produto {@link Produto} que será editado
+     * */
+    public void atualizarTipoProduto(Produto produto) {
+        try {
+            TipoProduto novoTipoProduto;
+            do {
+                novoTipoProduto = selecionarTipoProduto(produto.getTipoProduto());
+                if (novoTipoProduto == null)
+                    return;
+
+                if (novoTipoProduto.equals(produto.getTipoProduto())) {
+                    System.out.println("\033[1;31mNovo tipo do produto não pode ser igual ao atual.\033[m");
+                } else {
+                    produto.setTipoProduto(novoTipoProduto);
+
+                    boolean produtoEditado = produto.editar();
+                    if (produtoEditado) {
+                        System.out.println("\033[1;92mTipo do produto alterado com sucesso!\033[m");
+                        return;
+                    } else {
+                        System.out.println("\033[1;31mFalha ao editar o tipo do produto\033[m");
+                    }
+                }
+            } while (true);
+        }
+        catch (Exception ex) {
+            System.out.println("\033[1;31mOcorreu um erro durante a atualização do tipo do produto\033[m");
+        }
+    }
+
+    /**
+     * Exibe as informações do produto e excluí o produto
+     * do sistema após confirmação
+     *
+     * @param produto {@link Produto} que será removido
+     * */
+    public void excluirProduto(Produto produto) {
+        try {
+            mostrarProduto(produto);
+            System.out.println("\033[1;94m==================\033[m\n");
+            boolean produtoIraExcluir = Interacao.inputBooleano("Você deseja realmente excluir o produto " + produto.getNomeFormatado() + " [s/n]: ");
+            if (!produtoIraExcluir) {
+                System.out.println("\033[1;92mOperação Cancelada\033[m");
+                return;
+            }
+            boolean produtoFoiExcluido = produto.remover();
+            if (produtoFoiExcluido)
+                System.out.println("\033[1;92mProduto " + produto.getNome() +" foi excluído com sucesso do estoque!\033[m");
+            else
+                System.out.println("\033[1;31mFalha ao tentar excluir o produto"+ produto.getNome() +"\033[m");
+        }
+        catch (Exception ex) {
+            System.out.println("\033[1;31mOcorreu um erro durante a remoção do produto\033[m");
+        }
     }
 
     /**
@@ -182,9 +417,45 @@ public class MenuProduto {
                 .collect(Collectors.joining(" - "));
         String valor;
         do {
-            System.out.printf("Tipos Disponíveis: %s%n", tipos);
-            System.out.print("Tipo do Produto: ");
+            System.out.printf("\033[1mTipos Disponíveis:\033[m %s", tipos);
+            System.out.print("\033[1mTipo do Produto:\033[m ");
             valor = scanner.nextLine();
+
+            String finalValor = valor;
+            valorTipoValido = Arrays.stream(TipoProduto.values())
+                    .anyMatch(t -> t.name().equalsIgnoreCase(finalValor));
+            if (!valorTipoValido) {
+                System.out.println();
+                System.out.println("\033[1;31mTipo de Produto inválido\033[m\n");
+            }
+
+        } while (!valorTipoValido);
+
+        return TipoProduto.valueOf(valor.toUpperCase());
+    }
+
+    /**
+     * Solicita ao usuário que selecione um {@link TipoProduto} válido
+     * dentre os disponíveis no sistema.
+     *
+     * @return {@link TipoProduto} selecionado pelo usuário
+     */
+    public TipoProduto selecionarTipoProduto(TipoProduto tipoAtualProduto) {
+        boolean valorTipoValido;
+
+        String tipos = Arrays.stream(TipoProduto.values())
+                .map(tp -> tp.getDescricao().toUpperCase())
+                .collect(Collectors.joining(" - "));
+        String valor;
+        do {
+            System.out.println("\033[1;93mDigite 0 para voltar ao menu\033[m");
+            System.out.println("\033[1mTipo atual do produto: \033[1;94m" + tipoAtualProduto.getDescricao().toUpperCase() + "\033[m");
+            System.out.printf("\033[1mTipos Disponíveis:\033[m %s\n", tipos);
+            System.out.print("\033[1mNovo tipo do Produto:\033[m ");
+            valor = scanner.nextLine();
+
+            if (valor.equalsIgnoreCase("0"))
+                return null;
 
             String finalValor = valor;
             valorTipoValido = Arrays.stream(TipoProduto.values())
@@ -203,15 +474,13 @@ public class MenuProduto {
      * Exibe o nome e nome científico do produto formatados com a cor
      * ANSI correspondente ao seu {@link TipoProduto}.
      *
-     * @param nome           nome do produto
-     * @param nomeCientifico nome científico do produto
-     * @param tipoProduto    tipo do produto para definição da cor
+     * @param produto           Produto a ser exibido
      */
-    public void mostrarProdutoPorCor(String nome, String nomeCientifico, TipoProduto tipoProduto) {
-        String textoBase = "▸ \033[1;corm%s (%s)\033[m\n";
+    public void mostrarProdutoPorCor(Produto produto) {
+        String textoBase = "▸ \033[1;corm%s\033[m \033[1m| %s (%s) | Média de \033[4m%d dias\033[m para colheita\033[m\n";
 
         String textoFinal;
-        switch (tipoProduto.getDescricao().toLowerCase()) {
+        switch (produto.getTipoProduto().getDescricao().toLowerCase()) {
             case "legume":
                 textoFinal = textoBase.replace("cor", "35"); // roxo
                 break;
@@ -231,7 +500,7 @@ public class MenuProduto {
                 textoFinal = textoBase.replace("cor", "36"); // ciano
                 break;
         }
-        System.out.printf(textoFinal, nome, nomeCientifico);
+        System.out.printf(textoFinal, produto.getTipoProduto().getDescricao().toUpperCase(), produto.getNome(), produto.getNomeCientifico(), produto.getTempoColheitaEmDias());
     }
 
     /**
@@ -268,5 +537,13 @@ public class MenuProduto {
                 break;
         }
         System.out.printf(textoFinal, index, nome, nomeCientifico);
+    }
+
+    public void mostrarProduto(Produto produto) {
+        System.out.println("\033[1;93m=====| DETALHES DO PRODUTO |=====\033[m");
+        System.out.printf("\033[1mNome:\033[m %s\n", produto.getNomeFormatado());
+        System.out.printf("\033[1mNome Científico:\033[m \033[4m%s\033[m\n", produto.getNomeCientifico());
+        System.out.printf("\033[1mTipo do Produto:\033[m %s\n", produto.getTipoProduto().getDescricao());
+        System.out.printf("\033[1mTempo de Colheita:\033[m %d dias\n", produto.getTempoColheitaEmDias());
     }
 }

@@ -10,7 +10,6 @@ public class Main {
         }
         catch (Exception ex) {
             System.out.println("\033[1;31mOcorreu um erro Inesperado durante o programa SafePlant\033[m");
-            ex.printStackTrace();
         }
     }
 }

@@ -145,7 +145,7 @@ public class Produto implements IProduto {
     }
 
     /**
-     * Retorna o nome do produto formatado com cor ANSI de acordo com seu {@link TipoProduto}.
+     * Retorna o nome do produto formatado com cor ANSI conforme o seu {@link TipoProduto}.
      * Caso o tipo não esteja definido, retorna o nome sem formatação.
      * @return {@link String} com o nome formatado para exibição no terminal
      */
@@ -169,21 +169,44 @@ public class Produto implements IProduto {
      */
     public boolean adicionar() {
         try {
-            ArrayList<Produto> meusProduos = pegarMeusProdutos();
+            ArrayList<Produto> meusProdutos = pegarMeusProdutos();
+            boolean produtoJaExiste = existeProdutoPorNome(meusProdutos, this);
+            if (produtoJaExiste) {
+                System.out.println("\033[1;93mProduto "+ getNome() +" já adicionado pra esse agricultor.\033[m");
+                return false;
+            }
             return database.criarRegistro(this, Produto.class);
         }
         catch (Exception ex) {
-            ex.printStackTrace();
+            System.out.println("\033[1;31mOcorreu um erro ao adicionar o produto\033[m");
             return false;
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean remover() {
-        return false;
+        try {
+            return database.removerRegistro(this, Produto.class);
+        }
+        catch (Exception ex) {
+            System.out.println("\033[1;31mOcorreu um erro durante a exclusão do produto\033[m");
+            return false;
+        }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean editar() {
-        return false;
+        try {
+            return database.editarRegistro(this, Produto.class);
+        }
+        catch (Exception ex) {
+            System.out.println("\033[1;31mOcorreu um erro durante a exclusão do produto\033[m");
+            return false;
+        }
     }
 
     /**
@@ -195,7 +218,7 @@ public class Produto implements IProduto {
             return database.lerRegistro(Produto.class);
         }
         catch (Exception ex) {
-            ex.printStackTrace();
+            System.out.println("\033[1;31mOcorreu um erro durante a listagem de produtos\033[m");
             return new ArrayList<Produto>();
         }
     }
@@ -235,7 +258,7 @@ public class Produto implements IProduto {
     public ArrayList<Produto> pegarMeusProdutos() {
         ArrayList<Produto> produtos = exibirProdutos();
         if (produtos.isEmpty())
-            return new ArrayList<Produto>();
+            return produtos;
 
         ArrayList<Produto> meusProdutos = new ArrayList<Produto>();
         for (Produto prod : produtos) {
@@ -285,9 +308,32 @@ public class Produto implements IProduto {
         return meusProdutos;
     }
 
+    /**
+     * Retorna um booleano caso o produto já exista no estoque do agricultor
+     *
+     * @param produtos Lista de produtos que irá ser procurada
+     * @param prodAEncontrar Produto que desejamos verificar se já existe
+     * @return {@link Boolean} Verdadeiro caso já possua no estoque e Falso para caso não exista.
+     * */
     private static boolean existeProduto(ArrayList<Produto> produtos, Produto prodAEncontrar) {
         for (Produto prodF : produtos) {
             if (prodAEncontrar.getProdutoId().equalsIgnoreCase(prodF.getProdutoId()))
+                return true;
+        }
+        return false;
+    }
+
+    private static boolean existeProdutoPorNome(ArrayList<Produto> produtos, Produto prodAEncontrar) {
+        for (Produto prodF : produtos) {
+            if (prodF.getNome().equalsIgnoreCase(prodAEncontrar.getNome()))
+                return true;
+        }
+        return false;
+    }
+
+    private static boolean existeProdutoPorNomeCientifico(ArrayList<Produto> produtos, Produto prodAEncontrar) {
+        for (Produto prodF : produtos) {
+            if (prodF.getNome().equalsIgnoreCase(prodAEncontrar.getNomeCientifico()))
                 return true;
         }
         return false;

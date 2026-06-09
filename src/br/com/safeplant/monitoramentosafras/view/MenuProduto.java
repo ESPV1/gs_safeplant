@@ -553,6 +553,11 @@ public class MenuProduto {
         System.out.printf(textoFinal, index, nome, nomeCientifico);
     }
 
+    /**
+     * Exibir detalhes untitários de um produto
+     *
+     * @param produto {@link Produto} que será exibido na tela
+     * */
     public void mostrarProduto(Produto produto) {
         System.out.println("\033[1;93m=====| DETALHES DO PRODUTO |=====\033[m");
         System.out.printf("\033[1mNome:\033[m %s\n", produto.getNomeFormatado());

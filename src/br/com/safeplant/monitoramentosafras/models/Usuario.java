@@ -32,7 +32,7 @@ public class Usuario implements IUsuario {
     }
 
     /**
-     * Cria um novo usuário com nome completo, separando automaticamente primeiro nome e sobrenome.
+     * Cria um usuário com nome completo, separando automaticamente primeiro nome e sobrenome.
      * Define o último acesso como o momento atual e marca o usuário como ativo.
      *
      * @param nomeCompleto nome completo do usuário

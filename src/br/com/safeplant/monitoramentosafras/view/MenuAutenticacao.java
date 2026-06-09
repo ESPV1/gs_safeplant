@@ -34,7 +34,7 @@ public class MenuAutenticacao {
         boolean foiAutenticado;
         Usuario usuarioAutenticado = new Usuario();
         do {
-            System.out.println("Faça o \033[;31mLogin\033[m na plataforma ou \033[;31mdigite 1\033[m para cadastrar-se!");
+            System.out.println("Faça o \033[1;93mLogin\033[m na plataforma ou \033[1;93mdigite 1\033[m para cadastrar-se!");
             System.out.print("Usuário: ");
             String usuario = this.scanner.nextLine().trim();
             if (usuario.equals("1")) {
@@ -45,14 +45,14 @@ public class MenuAutenticacao {
 
             foiAutenticado = usuarioAutenticado.autenticar(usuario, senha);
             if (!foiAutenticado) {
-                System.out.println("Usuário ou senha inválidos.\n");
+                System.out.println("\033[1;31mUsuário ou senha inválidos.\033[m\n");
                 System.out.flush();
             }
         } while (!foiAutenticado);
 
         MenuPrincipal menu = new MenuPrincipal(usuarioAutenticado.getUsuarioId());
 
-        System.out.println("Perfil Autenticado com sucoesso!\nSeja Bem vindo!");
+        System.out.println("\033[1;92mPerfil Autenticado com sucesso, seja Bem vindo!\033[m");
         menu.exibir();
     }
 
@@ -76,18 +76,18 @@ public class MenuAutenticacao {
         boolean usuarioValido = novoUsuario.adicionar();
         boolean enderecoValido = novoEndereco.adicionar();
         if (!enderecoValido) {
-            System.out.println("Ocorreu um erro ao cadastraro endereço do Agricultor");
+            System.out.println("\033[1;31mOcorreu um erro ao cadastraro endereço do Agricultor\033[m");
             return;
         }
         novoAgro.setEnderecoId(novoEndereco.getEnderecoId());
         boolean agricultorValido = novoAgro.adicionar();
 
         if (usuarioValido && agricultorValido) {
-            System.out.println("Autenticação e Registro foram concluidos! Autentica-se e acesse!");
+            System.out.println("\033[1;92mAutenticação e Registro foram concluidos! Autentica-se e acesse!\033[m");
             exibirLogin();
         }
         else {
-            System.out.printf("Ocorreu um erro durante o registro do %s.", !usuarioValido ? "usuario" : "agricultor");
+            System.out.printf("\033[1;31mOcorreu um erro durante o registro do %s.\033[m", !usuarioValido ? "usuario" : "agricultor");
             exibirCadastro();
         }
     }
@@ -117,7 +117,7 @@ public class MenuAutenticacao {
         boolean usuarioValido;
         do {
             System.out.println("Digite \033[1;31mSair\033[m para encerrar o cadastro.");
-            System.out.println("Digite as informações solicitadas abaixo:\n");
+            System.out.println("\033[1;93mDigite as informações solicitadas abaixo\033[m\n");
 
             String nomeCompleto = Interacao.inputString("Nome Completo: ");
             if (Interacao.verificarSaida(nomeCompleto)) return null;
@@ -160,7 +160,7 @@ public class MenuAutenticacao {
         boolean agricultorValido;
         do {
             System.out.println("Digite \033[1;31mSair\033[m para encerrar o cadastro.");
-            System.out.println("Digite as informações solicitadas abaixo:\n");
+            System.out.println("\033[1;93mDigite as informações solicitadas abaixo\033[m\n");
 
             String cpf = Interacao.inputString("CPF: ");
             if (Interacao.verificarSaida(cpf)) return null;
@@ -197,7 +197,7 @@ public class MenuAutenticacao {
      */
     private Endereco exibirCadastroEndereco(Agricultor novoAgro) {
         System.out.println("Digite \033[1;31mSair\033[m para encerrar o cadastro.");
-        System.out.println("Digite as informações solicitadas abaixo:\n");
+        System.out.println("\033[1;93mDigite as informações solicitadas abaixo\033[m\n");
 
         boolean buscaPorCep;
         Endereco novoEndereco = new Endereco();
@@ -221,7 +221,7 @@ public class MenuAutenticacao {
                 enderecoPorCep.exibirInfosCep(false);
                 buscaPorCep = Interacao.inputBooleano("\nConfirma o endereço acima? [s/n]: ");
                 if (buscaPorCep) {
-                    System.out.println("Endereço Salvo!\n");
+                    System.out.println("\033[1;92mEndereço Salvo!\033[m\n");
                     novoEndereco = enderecoPorCep;
                     novoEndereco.setNumero(Interacao.inputString("Número: "));
                     if (enderecoPorCep.getComplemento().isEmpty())

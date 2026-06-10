@@ -14,6 +14,7 @@ Aplicação em console desenvolvida em **Java** como parte da **Global Solution 
 | Gabriel Amara                   | **561403** |
 | Camila Martins Lopes dos Santos | **561492** |
 | Guilherme Godoy dos Santos      | **564417** |
+
 _Projeto desenvolvido pelo grupo **GAPC** para a **Global Solution — FIAP**._
 
 ## Funcionalidades

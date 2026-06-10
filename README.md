@@ -2,6 +2,8 @@
 
 Aplicação em console desenvolvida em **Java** como parte da **Global Solution (FIAP)**, servindo de back-end para o aplicativo **Safe Plant**. O sistema permite que agricultores gerenciem suas safras, produtos cultivados e perfil pessoal diretamente pelo terminal.
 
+ODS relacionada ao projeto: ODS 2
+
 **Acesse o vídeo de apresentação** 👉 [Clicando aqui](https://youtu.be/XsQDMARpclQ)
 
 ---

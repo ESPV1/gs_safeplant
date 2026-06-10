@@ -20,5 +20,16 @@
     "senha": "Camila@1234",
     "ativo": true,
     "ultimoAcessoEm": "2026-06-09T20:24:29.300557900"
+  },
+  {
+    "usuarioId": "d82faac5-d2df-4800-98ed-e1db94aecbd3",
+    "nomeCompleto": "Admin Teste",
+    "nomeUsuario": "admin",
+    "primeiroNome": "Admin",
+    "sobrenome": "Teste",
+    "email": "admin@teste.com",
+    "senha": "Admin@123",
+    "ativo": true,
+    "ultimoAcessoEm": "2026-06-09T20:57:19.169102700"
   }
 ]

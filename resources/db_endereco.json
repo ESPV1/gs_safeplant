@@ -9,5 +9,16 @@
     "regiao": "Sudeste",
     "uf": "SP",
     "complemento": "teste"
+  },
+  {
+    "enderecoId": "f1b79984-12c6-4e77-b661-7744c95c0b7c",
+    "cep": "04094-040",
+    "logradouro": "Viaduto dos Imigrantes",
+    "numero": "100",
+    "bairro": "Parque Ibirapuera",
+    "localidade": "São Paulo",
+    "regiao": "Sudeste",
+    "uf": "SP",
+    "complemento": "Endereço teste"
   }
 ]

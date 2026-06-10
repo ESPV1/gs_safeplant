@@ -22,5 +22,13 @@
     "nomeCientifico": "Solanum tuberosum.",
     "tempoColheitaEmDias": 60,
     "agricultorId": "49f80cd1-dfe4-4c8a-aaa3-db343ef0d434"
+  },
+  {
+    "produtoId": "dcbe78b1-cf0d-42b4-90c1-c8ba2569471a",
+    "nome": "Banana",
+    "tipoProduto": "FRUTA",
+    "nomeCientifico": "Musa spp",
+    "tempoColheitaEmDias": 90,
+    "agricultorId": "e1066532-e2e7-42ae-bcc8-03aad0cb3e81"
   }
 ]

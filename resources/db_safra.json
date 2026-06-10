@@ -69,5 +69,26 @@
     "area": 4000.0,
     "latitude": -1.0,
     "longitude": -1.0
+  },
+  {
+    "safraId": "7e6a9675-d52b-4c7b-b7a9-2e5cd697e5b2",
+    "nomeSafra": "Safra para cultivo de Banana",
+    "dataInicio": "09/06/2026",
+    "dataFim": "09/06/2027",
+    "status": "EM_ANDAMENTO",
+    "cultivados": [
+      {
+        "produtoId": "dcbe78b1-cf0d-42b4-90c1-c8ba2569471a",
+        "nome": "Banana",
+        "tipoProduto": "FRUTA",
+        "nomeCientifico": "Musa spp",
+        "tempoColheitaEmDias": 90,
+        "agricultorId": "e1066532-e2e7-42ae-bcc8-03aad0cb3e81"
+      }
+    ],
+    "agricultorId": "e1066532-e2e7-42ae-bcc8-03aad0cb3e81",
+    "area": 40000.0,
+    "latitude": -10.0,
+    "longitude": -20.0
   }
 ]
